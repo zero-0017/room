@@ -480,71 +480,77 @@
 
     </div>
 
-    <!-- 本日の用意するリネン【合計】 下部固定 (初期非表示、リネン・メイクタブ時のみJSで表示制御) -->
-    <div id="sticky-linen-footer" class="fixed bottom-0 left-0 right-0 md:left-[33.33%] md:right-0 lg:left-[25%] lg:right-[25%] bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-t-2 border-gold-300 shadow-2xl z-40 rounded-t-2xl hidden">
+    <!-- 本日の用意するリネン【合計】 フローティングパネル (初期非表示、リネン・メイクタブ時のみJSで表示制御) -->
+    <div id="sticky-linen-footer" class="fixed bottom-4 left-4 right-4 md:left-[calc(33.33%+1rem)] md:right-4 lg:left-[calc(25%+1rem)] lg:right-4 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-2 border-gold-300 shadow-2xl z-40 rounded-2xl hidden transition-all duration-300">
         
-        <!-- 静的ヘッダー（アコーディオンなし） -->
-        <div class="flex items-center justify-between px-4 py-3 border-b border-gold-300/20">
+        <!-- 動的ヘッダー（アコーディオン） -->
+        <button onclick="toggleLinenTotalPanel()" class="w-full flex items-center justify-between px-4 py-3.5 focus:outline-none rounded-2xl">
             <h3 class="font-serif font-black text-xs sm:text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
                 <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                 </svg>
                 本日用意するリネン【合計】
             </h3>
-        </div>
+            <div class="flex items-center gap-2">
+                <span id="linen-toggle-badge" class="text-[10px] bg-gold-300/20 text-gold-300 border border-gold-300/30 px-2 py-0.5 rounded font-black font-serif">開く</span>
+                <svg id="linen-toggle-arrow" class="w-5 h-5 text-gold-300 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </button>
 
-        <!-- リネン内訳（常に表示） -->
-        <div id="linen-total-content" class="p-3 grid grid-cols-2 gap-1.5 sm:grid-cols-4 max-h-[190px] overflow-y-auto">
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+        <!-- リネン内訳（アコーディオンで開閉） -->
+        <div id="linen-total-content" class="hidden p-3 grid grid-cols-2 gap-1.5 sm:grid-cols-4 border-t border-gold-300/20 overflow-y-auto" style="max-height: 60vh;">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-slate-400 font-bold serif-title">掛けシーツ (S)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-white" id="total-kake-s">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (S)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-gold-300" id="total-shiki-s">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-slate-400 font-bold serif-title">掛けシーツ (SD)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-white" id="total-kake-sd">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (SD)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-gold-300" id="total-shiki-sd">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-slate-400 font-bold serif-title">掛けシーツ (W)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-white" id="total-kake-w">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (W)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-gold-300" id="total-shiki-w">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-gold-300 font-bold serif-title">枕カバー (通常)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-gold-300" id="total-pillow">0</span>
                     <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
                 </div>
             </div>
-            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+            <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                 <span class="text-[10px] text-gold-300 font-bold serif-title">枕カバー (大)</span>
                 <div class="text-right mt-0.5">
                     <span class="text-xl font-black text-gold-300" id="total-pillow-large">0</span>
@@ -724,7 +730,8 @@
             activeRoomId: null,
             expandedFloors: {},
             expandedGroups: { "本館": true, "観月亭": true },
-            addPanelOpen: false
+            addPanelOpen: false,
+            linenPanelOpen: false
         };
 
         let touchStartX = 0;
@@ -1043,7 +1050,7 @@
             const adult_A = adult + a;
             const adult_A_B = adult + a + b;
             const adult_A_B_C = adult + a + b + c;
-            const total = totalGuests = adult + a + b + c + d;
+            const total = adult + a + b + c + d;
 
             const hasSakiZuki = (count_j > 0 || count_t > 0);
             const hasBeds = !(number === "406" || rule === "5F_1");
@@ -1282,7 +1289,7 @@
                 const haoriQty = adultBase + a;
 
                 if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・シーツ・枕カバー of 汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・シーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
 
                 result.washroom = [
                     { name: "コップ", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
@@ -1498,6 +1505,7 @@
             }
         }
 
+        // メモ帳
         function toggleMemo(open) {
             const panel = document.getElementById('memo-panel');
             const overlay = document.getElementById('memo-overlay');
@@ -1510,6 +1518,24 @@
                 panel.classList.add('translate-x-full');
                 overlay.classList.add('pointer-events-none', 'opacity-0');
             }
+        }
+
+        function toggleLinenTotalPanel() {
+            state.linenPanelOpen = !state.linenPanelOpen;
+            const container = document.getElementById('linen-total-content');
+            const arrow = document.getElementById('linen-toggle-arrow');
+            const badge = document.getElementById('linen-toggle-badge');
+            
+            if (state.linenPanelOpen) {
+                container.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+                badge.textContent = '閉じる';
+            } else {
+                container.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+                badge.textContent = '開く';
+            }
+            saveStateToLocalStorage();
         }
 
         function toggleAddRoomPanel() {
@@ -1583,6 +1609,7 @@
                     if (!state.currentTab) state.currentTab = 'prep';
                     if (!state.expandedFloors) state.expandedFloors = {};
                     if (!state.expandedGroups) state.expandedGroups = { "本館": true, "観月亭": true };
+                    if (state.linenPanelOpen === undefined) state.linenPanelOpen = false;
                     
                     state.rooms.forEach(r => {
                         if (r.guests && r.guests.j === undefined) r.guests.j = 0;
@@ -1692,7 +1719,7 @@
                             const isActive = room.id === state.activeRoomId;
                             
                             let bgClass = isActive 
-                                ? 'bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 border border-gold-300 shadow' 
+                                ? 'bg-gradient-to-r from-gold-300 to-gold-200 text-slate-950 border border-gold-300 shadow' 
                                 : (isCompleted ? 'bg-emerald-950/40 text-emerald-300 border border-emerald-800/30' : 'bg-slate-900/60 text-slate-300 border border-slate-800/50');
 
                             roomsListHTML += `
@@ -2255,7 +2282,8 @@
             card.innerHTML = `
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-3">
-                        <div class="w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black ${isCompleted ? 'bg-emerald-100 text-emerald-950' : 'bg-gradient-to-b from-gold-500 to-gold-400 text-slate-950'} shadow-sm">
+                        <!-- 401号室バッジ背景色を濃いゴールドから、気品ある和モダンゴールド(gold-300からgold-200へのグラデーション)に統一 -->
+                        <div class="w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black ${isCompleted ? 'bg-emerald-100 text-emerald-950' : 'bg-gradient-to-b from-gold-300 to-gold-200 text-slate-950'} shadow-sm">
                             <span class="text-[10px] font-bold leading-none font-sans">${escapeHTML(activeRoom.floor)}</span>
                             <span class="text-xl font-black leading-tight mt-0.5 font-sans">${escapeHTML(activeRoom.number)}</span>
                         </div>
@@ -2839,6 +2867,20 @@
             updateDashboard();
             switchTab(state.currentTab === 'bed' ? 'bed' : 'prep');
             renderSidebarAccordion();
+
+            // リネンパネルの初期状態反映
+            const linenContainer = document.getElementById('linen-total-content');
+            const linenArrow = document.getElementById('linen-toggle-arrow');
+            const linenBadge = document.getElementById('linen-toggle-badge');
+            if (state.linenPanelOpen) {
+                linenContainer.classList.remove('hidden');
+                if (linenArrow) linenArrow.style.transform = 'rotate(180deg)';
+                if (linenBadge) linenBadge.textContent = '閉じる';
+            } else {
+                linenContainer.classList.add('hidden');
+                if (linenArrow) linenArrow.style.transform = 'rotate(0deg)';
+                if (linenBadge) linenBadge.textContent = '開く';
+            }
 
             const cancelBtn = document.getElementById('confirm-modal-cancel');
             const okBtn = document.getElementById('confirm-modal-ok');
