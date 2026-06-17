@@ -378,7 +378,7 @@
         <section class="hidden md:block md:col-span-4 lg:col-span-3 bg-slate-900 text-slate-100 rounded-2xl border border-slate-800 p-4 shadow-md sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto">
             <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                 <div class="flex items-center gap-2">
-                    <span class="w-1.5 h-4 bg-gold-400 rounded-sm"></span>
+                    <span class="w-1.5 h-4 bg-gold-300 rounded-sm"></span>
                     <span class="font-black text-xs text-white serif-title">本日の担当客室一覧</span>
                 </div>
                 <button onclick="clearAllRoomsPrompt()" class="text-xs text-red-400 hover:text-red-300 font-bold flex items-center gap-1 transition-colors serif-title">全部リセット</button>
@@ -389,10 +389,10 @@
         <!-- メイン点検ワークスペース (中央カラム) -->
         <section class="col-span-1 md:col-span-8 lg:col-span-6 space-y-4">
             <!-- 客室の追加・一括登録パネル -->
-            <div class="bg-white rounded-2xl shadow-md border border-slate-200/80">
+            <div id="add-room-outer-panel" class="bg-white rounded-2xl shadow-md border border-slate-200/80">
                 <button onclick="toggleAddRoomPanel()" class="w-full px-4 py-3.5 flex items-center justify-between text-left focus:outline-none">
                     <h2 class="text-sm font-black text-emerald-950 flex items-center gap-1.5 tracking-wider uppercase serif-title">
-                        <span class="w-1.5 h-4 bg-gradient-to-b from-gold-400 to-gold-600 rounded-sm inline-block"></span>
+                        <span class="w-1.5 h-4 bg-gradient-to-b from-gold-300 to-gold-500 rounded-sm inline-block"></span>
                         客室の追加・一括登録パネル
                     </h2>
                     <div class="flex items-center gap-1.5">
@@ -445,8 +445,8 @@
                 </div>
             </div>
 
-            <!-- リネン・メイク（バグ原因だった重複部を綺麗に1枚に統合・再構築） -->
-            <div id="tab-content-bed" class="space-y-3 hidden">
+            <!-- リネン・メイクタブ -->
+            <div id="tab-content-bed" class="space-y-3 pb-[320px] hidden">
                 <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 space-y-2">
                     <div class="flex items-center justify-between">
                         <h2 class="text-sm font-bold text-emerald-900 flex items-center gap-1.5 tracking-wider uppercase serif-title">
@@ -461,83 +461,10 @@
                 </div>
 
                 <div id="bedmaking-rooms-container" class="space-y-3"></div>
-
-                <!-- 本日の用意するベッドリネン【合計】（金枠・配色をgold-300で完全統一） -->
-                <div class="bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white rounded-2xl shadow-xl border-2 border-gold-300 p-4 space-y-3 sticky bottom-4 z-20">
-                    <div class="flex items-center justify-between border-b border-gold-300/30 pb-2">
-                        <h3 class="font-serif font-black text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
-                            <!-- クリップボード風のモダンなチェックリストアイコン -->
-                            <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                            </svg>
-                            本日用意するベッドリネン【合計】
-                        </h3>
-                        <span class="text-[10px] bg-gold-300/20 text-gold-300 border border-gold-300/30 px-2 py-0.5 rounded font-black font-serif">美春閣 管理用</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-slate-400 font-bold serif-title">掛けシーツ (シングル)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-white" id="total-kake-s">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-gold-300 font-bold serif-title">敷きシーツ (シングル)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-gold-300" id="total-shiki-s">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-slate-400 font-bold serif-title">掛けシーツ (セミダブル)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-white" id="total-kake-sd">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-gold-300 font-bold serif-title">敷きシーツ (セミダブル)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-gold-300" id="total-shiki-sd">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-slate-400 font-bold serif-title">掛けシーツ (ダブル)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-white" id="total-kake-w">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-gold-300 font-bold serif-title">敷きシーツ (ダブル)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-gold-300" id="total-shiki-w">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-gold-300 font-bold serif-title">枕カバー (通常)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-gold-300" id="total-pillow">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                        <div class="bg-slate-900/80 p-2 rounded-xl border border-slate-800 flex flex-col justify-between">
-                            <span class="text-xs text-gold-300 font-bold serif-title">枕カバー (大)</span>
-                            <div class="text-right mt-1">
-                                <span class="text-2xl font-black text-gold-300" id="total-pillow-large">0</span>
-                                <span class="text-xs text-slate-500 font-semibold ml-0.5">枚</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
-        <!-- PC/iPad専用：常時右側に固定されるメモ帳 (右カラム) -->
+        <!-- PC/iPad専用：常時右側に固定されるメモ帳 -->
         <section class="hidden lg:block lg:col-span-3 bg-[#FAF8F2] text-slate-900 rounded-2xl border border-gold-200 p-4 shadow-md sticky top-[120px] max-h-[calc(100vh-140px)] overflow-y-auto">
             <div class="flex items-center gap-1.5 text-slate-900 border-b border-gold-200 pb-2 mb-3">
                 <svg class="w-5 h-5 text-gold-300" fill="currentColor" viewBox="0 0 20 20"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path></svg>
@@ -551,6 +478,80 @@
             </div>
         </section>
 
+    </div>
+
+    <!-- 本日の用意するリネン【合計】 下部固定 (初期非表示、リネン・メイクタブ時のみJSで表示制御) -->
+    <div id="sticky-linen-footer" class="fixed bottom-0 left-0 right-0 md:left-[33.33%] md:right-0 lg:left-[25%] lg:right-[25%] bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-t-2 border-gold-300 shadow-2xl z-40 rounded-t-2xl hidden">
+        
+        <!-- 静的ヘッダー（アコーディオンなし） -->
+        <div class="flex items-center justify-between px-4 py-3 border-b border-gold-300/20">
+            <h3 class="font-serif font-black text-xs sm:text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+                本日用意するリネン【合計】
+            </h3>
+        </div>
+
+        <!-- リネン内訳（常に表示） -->
+        <div id="linen-total-content" class="p-3 grid grid-cols-2 gap-1.5 sm:grid-cols-4 max-h-[190px] overflow-y-auto">
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-slate-400 font-bold serif-title">掛けシーツ (S)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-white" id="total-kake-s">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (S)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-gold-300" id="total-shiki-s">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-slate-400 font-bold serif-title">掛けシーツ (SD)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-white" id="total-kake-sd">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (SD)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-gold-300" id="total-shiki-sd">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-slate-400 font-bold serif-title">掛けシーツ (W)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-white" id="total-kake-w">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (W)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-gold-300" id="total-shiki-w">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-gold-300 font-bold serif-title">枕カバー (通常)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-gold-300" id="total-pillow">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+            <div class="bg-slate-900/80 p-1.5 rounded-lg border border-slate-800 flex flex-col justify-between">
+                <span class="text-[10px] text-gold-300 font-bold serif-title">枕カバー (大)</span>
+                <div class="text-right mt-0.5">
+                    <span class="text-xl font-black text-gold-300" id="total-pillow-large">0</span>
+                    <span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- カスタム確認モーダル -->
@@ -791,6 +792,8 @@
 
         function getUnit(name) {
             if (!name) return "個";
+            if (name.includes("コーヒー系")) return "セット";
+            if (name.includes("湯呑み＆茶パック")) return "セット";
             if (name.includes("種類")) return "セット";
             if (name.includes("足袋")) return "個";
             if (name.includes("シーツ") || name.includes("カバー") || name.includes("タオル") || name.includes("マット") || name.includes("羽織") || name.includes("用紙") || name.includes("ペーパー") || name.includes("バッグ") || name.includes("帯")) return "枚";
@@ -1112,7 +1115,7 @@
                 if (isBathInRoom) result.towels.unshift({ name: "バスタオル", qty: adult_A_B, note: "大人・AとB　※403, 405のみ" });
 
                 result.server = [
-                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
+                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
                     { name: "グラス", qty: 6 },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" }
                 ];
@@ -1147,7 +1150,7 @@
                     result.others.push({ name: "敷布団シーツ＆枕カバー", qty: sheetQty, note: number === '406' ? "406号室人数×2枚" : "3人以上時敷シーツ追加(入れ入れ忘れ注意)" });
                 }
                 if (number === '406' && hasSakiZuki) {
-                    result.others.push({ name: "⚠︎先敷忘れ注意", qty: 1, note: "J・T対象", isWarning: true, isRed: true, isRed: true });
+                    result.others.push({ name: "⚠︎先敷忘れ注意", qty: 1, note: "J・T対象", isWarning: true, isRed: true });
                 }
             }
 
@@ -1188,7 +1191,7 @@
                 result.server = [
                     { name: "ティーパック 4種類", qty: 1, note: "1セット" },
                     { name: "茶パック", qty: isAdultAlone ? 2 : teaPackCount, note: isAdultAlone ? "大人1名のみ : 2個" : "2人以下2個 / 3人以上人数分" },
-                    { name: "湯呑み", qty: teaCupQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
+                    { name: "湯呑み＆茶パック", qty: teaCupQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
                     { name: "ティーカップ", qty: teaCupQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
                     { name: "グラス", qty: 6 },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" }
@@ -1251,10 +1254,10 @@
                 ];
 
                 result.server = [
-                    { name: "湯呑み", qty: adultSuiteBase },
+                    { name: "湯呑み＆茶パック", qty: adultSuiteBase, note: isAdultAlone ? "大人1名のみ : 2セット" : "" },
                     { name: "ティーカップ", qty: adultSuiteBase },
                     { name: "ティーパック 4種類", qty: adultSuiteBase > 0 ? 1 : 0, note: "1セット ※茶パックは2つ" },
-                    { name: "コーヒー系", qty: adultSuiteBase },
+                    { name: "コーヒー系", qty: adultSuiteBase, note: isAdultAlone ? "大人1名のみ : 2セット" : "" },
                     { name: "ドリンク 4種類 《冷蔵》", qty: adultSuiteBase > 0 ? 1 : 0, note: "緑茶 ➡︎ ジャスミン茶 ➡︎ りんごジュース ➡︎ 炭酸水" }
                 ];
 
@@ -1279,7 +1282,7 @@
                 const haoriQty = adultBase + a;
 
                 if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・シーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・シーツ・枕カバー of 汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
 
                 result.washroom = [
                     { name: "コップ", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
@@ -1303,7 +1306,7 @@
                 if (isBathInRoom) result.towels.unshift({ name: "バスタオル", qty: adult_A_B, note: "大人・AとB　※606~617のみ" });
 
                 result.server = [
-                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
+                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
                     { name: "グラス", qty: glsQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" }
                 ];
@@ -1367,7 +1370,7 @@
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
                 result.server = [
-                    { name: "湯呑み", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
+                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
                     { name: "ティーカップ", qty: adultBase + a + b, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" },
                     { name: "ドリンク 4種類 《冷蔵》", qty: adult > 0 ? 1 : 0, note: "緑茶 ➡︎ ジャスミン茶 ➡︎ りんごジュース ➡︎ 炭酸水" },
@@ -1440,7 +1443,7 @@
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
                 result.server = [
-                    { name: "湯呑み", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
+                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
                     { name: "ティーカップ", qty: adultBase + a + b, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" },
                     { name: "日本酒", qty: adult > 0 ? 1 : 0, note: "1瓶" },
@@ -1543,7 +1546,6 @@
                 }
             }
             
-            // 暗号化してローカルストレージへ保存
             localStorage.setItem('biharaku_confirmed_memo_secured', secureEncrypt(text));
             const indicator = document.getElementById('memo-indicator');
             if (indicator) {
@@ -1554,7 +1556,7 @@
 
         function loadMemo() {
             const savedSecured = localStorage.getItem('biharaku_confirmed_memo_secured');
-            const saved = savedSecured ? secureDecrypt(savedSecured) : localStorage.getItem('biharaku_confirmed_memo'); // 旧データ互換
+            const saved = savedSecured ? secureDecrypt(savedSecured) : localStorage.getItem('biharaku_confirmed_memo'); 
             const mobTextarea = document.getElementById('app-memo-textarea');
             const pcTextarea = document.getElementById('pc-app-memo-textarea');
             const indicator = document.getElementById('memo-indicator');
@@ -1566,15 +1568,14 @@
             }
         }
 
-        // ストレージ・ステート管理 (暗号化対応)
         function saveStateToLocalStorage() {
             const rawJSON = JSON.stringify(state);
-            localStorage.setItem('biharaku_confirmed_checklist_secured_v4', secureEncrypt(rawJSON));
+            localStorage.setItem('biharaku_confirmed_checklist_secured_v4_upgraded', secureEncrypt(rawJSON));
         }
 
         function loadStateFromLocalStorage() {
-            const savedSecured = localStorage.getItem('biharaku_confirmed_checklist_secured_v4');
-            const saved = savedSecured ? secureDecrypt(savedSecured) : localStorage.getItem('biharaku_confirmed_checklist_state_pro_v3_updated'); // 旧データ互換
+            const savedSecured = localStorage.getItem('biharaku_confirmed_checklist_secured_v4_upgraded');
+            const saved = savedSecured ? secureDecrypt(savedSecured) : null; 
             
             if (saved) {
                 try {
@@ -1582,6 +1583,7 @@
                     if (!state.currentTab) state.currentTab = 'prep';
                     if (!state.expandedFloors) state.expandedFloors = {};
                     if (!state.expandedGroups) state.expandedGroups = { "本館": true, "観月亭": true };
+                    
                     state.rooms.forEach(r => {
                         if (r.guests && r.guests.j === undefined) r.guests.j = 0;
                         if (r.guests && r.guests.t === undefined) r.guests.t = 0;
@@ -1604,7 +1606,6 @@
             state.rooms.sort((a, b) => parseInt(a.number, 10) - parseInt(b.number, 10));
         }
 
-        // 画面描画処理
         function renderSidebarAccordion() {
             const mobContainer = document.getElementById('sidebar-accordion-container');
             const pcContainer = document.getElementById('pc-sidebar-accordion-container');
@@ -1774,27 +1775,14 @@
             });
         }
 
-        function toggleGroupAccordion(groupName) {
-            if (!state.expandedGroups) state.expandedGroups = { "本館": true, "観月亭": true };
-            state.expandedGroups[groupName] = !state.expandedGroups[groupName];
-            saveStateToLocalStorage();
-            renderSidebarAccordion();
-        }
-
-        function toggleSubAccordion(expandKey) {
-            if (!state.expandedFloors) state.expandedFloors = {};
-            state.expandedFloors[expandKey] = !state.expandedFloors[expandKey];
-            saveStateToLocalStorage();
-            renderSidebarAccordion();
-        }
-
         function selectActiveRoom(id) {
             state.activeRoomId = id;
             saveStateToLocalStorage();
             toggleSidebar(false); 
+
             if (state.currentTab === 'prep') {
                 renderRoomsList();
-            } else {
+            } else if (state.currentTab === 'bed') {
                 renderBedmakingView();
             }
             updateDashboard();
@@ -1807,20 +1795,28 @@
 
             const btnPrep = document.getElementById('tab-btn-prep');
             const btnBed = document.getElementById('tab-btn-bed');
+            
             const contentPrep = document.getElementById('tab-content-prep');
             const contentBed = document.getElementById('tab-content-bed');
 
+            const addRoomPanel = document.getElementById('add-room-outer-panel');
+            const stickyFooter = document.getElementById('sticky-linen-footer');
+
+            // 一旦すべてのタブをOFF
+            [btnPrep, btnBed].forEach(b => b.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all text-gold-100/70 hover:text-white flex items-center justify-center gap-1 serif-title");
+            [contentPrep, contentBed].forEach(c => c.classList.add('hidden'));
+
             if (tabId === 'prep') {
-                btnPrep.className = "py-2.5 text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
-                btnBed.className = "py-2.5 text-sm font-black rounded-xl transition-all text-gold-100/70 hover:text-white flex items-center justify-center gap-1.5 serif-title";
+                btnPrep.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
                 contentPrep.classList.remove('hidden');
-                contentBed.classList.add('hidden');
+                addRoomPanel.classList.remove('hidden');
+                stickyFooter.classList.add('hidden'); // 点検タブ時はリネン合計を隠す
                 renderRoomsList();
-            } else {
-                btnPrep.className = "py-2.5 text-sm font-black rounded-xl transition-all text-gold-100/70 hover:text-white flex items-center justify-center gap-1.5 serif-title";
-                btnBed.className = "py-2.5 text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
-                contentPrep.classList.add('hidden');
+            } else if (tabId === 'bed') {
+                btnBed.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
                 contentBed.classList.remove('hidden');
+                addRoomPanel.classList.remove('hidden');
+                stickyFooter.classList.remove('hidden'); // リネンタブ時のみ表示
                 renderBedmakingView();
             }
         }
@@ -1958,7 +1954,7 @@
                 } else {
                     cardBody.className = "bg-red-50/40 border-2 border-red-200 p-4 rounded-2xl shadow-sm space-y-4 transition-all duration-300";
                     statusBanner.className = "py-3 px-4 bg-[#cc3333] text-white rounded-lg text-xs font-bold text-center shadow-sm serif-title";
-                    statusBanner.innerHTML = "⚠ まだ未確認 of 項目があります。点検を続けてください。";
+                    statusBanner.innerHTML = "⚠ まだ未確認の項目があります。点検を続けてください。";
                     warningAlert.classList.remove('hidden');
                 }
             }
@@ -2024,40 +2020,32 @@
 
             const calculated = calculateItems(room.rule, room.number, room.guests, room.remarks, room.option);
 
-            // 生成リストをサニタイズして出力
-            const generateListHTML = (list, categoryName) => {
-                const activeList = list.filter(item => item.qty > 0 || item.isWarning);
-                if (activeList.length === 0) return '';
+            // 有効なカテゴリのみを等間隔で配置するための配列
+            const activeCategoriesHTML = [];
 
+            // 1. 客室の事前点検（数量バッジなし）
+            const preCheckList = calculated.preCheck.filter(item => item.qty > 0 || item.isWarning);
+            if (preCheckList.length > 0) {
                 let html = `
-                    <div class="mb-3.5">
-                        <span class="text-xs text-emerald-950 font-black bg-gold-200/90 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">${escapeHTML(categoryName)}</span>
+                    <div>
+                        <span class="text-xs text-emerald-950 font-black bg-gold-200/90 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">客室の事前点検</span>
                         <div class="space-y-1.5 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">
                 `;
-
-                activeList.forEach((item, idx) => {
-                    const key = `${escapeHTML(categoryName)}_${idx}`;
+                preCheckList.forEach((item, idx) => {
+                    const key = `客室の事前点検_${idx}`;
                     const isChecked = room.checkedItems[key] ? 'checked' : '';
                     const isWarnItem = item.isWarning;
                     const textClass = room.checkedItems[key] 
                         ? 'line-through text-slate-400 font-normal' 
                         : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (isWarnItem ? 'text-amber-800 font-black' : 'text-slate-800 font-black'));
 
-                    // 安全にエスケープし、特定の強調タグ《》のみをハイライト置換する
-                    let displayName = escapeHTML(item.name).replace(/&lt;(.*?)&gt;/g, function(m, p1) {
-                        return '<span class="text-blue-600 font-bold">《' + p1 + '》</span>';
-                    });
-                    let displayNote = escapeHTML(item.note || '').replace(/&lt;(.*?)&gt;/g, function(m, p1) {
-                        return '<span class="text-blue-600 font-bold">《' + p1 + '》</span>';
-                    });
-
-                    const dynamicUnit = getUnit(item.name);
+                    let displayName = escapeHTML(item.name).replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
+                    let displayNote = escapeHTML(item.note || '').replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
 
                     html += `
                         <label class="flex items-start gap-3 py-2 px-1.5 cursor-pointer hover:bg-slate-50 rounded-md transition-colors border-b border-dashed border-slate-100 last:border-none">
-                            <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '${escapeHTML(categoryName)}', ${idx})" class="w-5 h-5 mt-0.5 rounded border-2 border-slate-300 text-emerald-800 focus:ring-emerald-700 accent-emerald-800 shrink-0">
+                            <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '客室の事前点検', ${idx})" class="w-5 h-5 mt-0.5 rounded border-2 border-slate-300 text-emerald-800 focus:ring-emerald-700 accent-emerald-800 shrink-0">
                             <div class="text-sm ${textClass} flex items-start flex-wrap gap-1 leading-normal serif-regular">
-                                <span class="bg-gold-100 border border-gold-300 px-2 py-0.5 rounded text-xs font-black shrink-0 leading-none inline-block font-sans">${item.qty}${escapeHTML(dynamicUnit)}</span>
                                 <span class="flex-1 keep-word">${displayName}</span>
                                 ${displayNote ? `<span class="text-xs text-slate-400 font-bold font-sans block w-full ml-0 mt-0.5">(${displayNote})</span>` : ''}
                             </div>
@@ -2065,21 +2053,58 @@
                     `;
                 });
                 html += `</div></div>`;
-                return html;
+                activeCategoriesHTML.push(html);
+            }
+
+            // 2. 通常アメニティカテゴリのヘルパー
+            const addNormalCategory = (list, categoryName) => {
+                const activeList = list.filter(item => item.qty > 0 || item.isWarning);
+                if (activeList.length === 0) return;
+
+                let html = `
+                    <div>
+                        <span class="text-xs text-emerald-950 font-black bg-gold-200/90 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">${escapeHTML(categoryName)}</span>
+                        <div class="space-y-1.5 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">
+                `;
+                activeList.forEach((item, idx) => {
+                    const key = `${categoryName}_${idx}`;
+                    const isChecked = room.checkedItems[key] ? 'checked' : '';
+                    const isWarnItem = item.isWarning;
+                    const textClass = room.checkedItems[key] 
+                        ? 'line-through text-slate-400 font-normal' 
+                        : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (isWarnItem ? 'text-amber-800 font-black' : 'text-slate-800 font-black'));
+
+                    let displayName = escapeHTML(item.name).replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
+                    let displayNote = escapeHTML(item.note || '').replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
+
+                    const dynamicUnit = getUnit(item.name);
+
+                    html += `
+                        <label class="flex items-start gap-3 py-2 px-1.5 cursor-pointer hover:bg-slate-50 rounded-md transition-colors border-b border-dashed border-slate-100 last:border-none">
+                            <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '${escapeHTML(categoryName)}', ${idx})" class="w-5 h-5 mt-0.5 rounded border-2 border-slate-300 text-emerald-800 focus:ring-emerald-700 accent-emerald-800 shrink-0">
+                            <div class="text-sm ${textClass} flex items-start flex-wrap gap-1 leading-normal serif-regular">
+                                ${!isWarnItem ? `<span class="bg-gold-100 border border-gold-300 px-2 py-0.5 rounded text-xs font-black shrink-0 leading-none inline-block font-sans">${item.qty}${escapeHTML(dynamicUnit)}</span>` : `<span class="bg-amber-500 text-slate-950 px-2 py-0.5 rounded text-[10px] font-black shrink-0 leading-none inline-block font-sans">注意確認</span>`}
+                                <span class="flex-1 keep-word">${displayName}</span>
+                                ${displayNote ? `<span class="text-xs text-slate-400 font-bold font-sans block w-full ml-0 mt-0.5">(${displayNote})</span>` : ''}
+                            </div>
+                        </label>
+                    `;
+                });
+                html += `</div></div>`;
+                activeCategoriesHTML.push(html);
             };
 
-            const preCheckHTML = generateListHTML(calculated.preCheck, "客室の事前点検");
-            const washroomHTML = generateListHTML(calculated.washroom, "洗面所");
-            const toiletHTML = generateListHTML(calculated.toilet, "トイレ");
-            const fourSetHTML = generateListHTML(calculated.fourSet, "4点セット");
-            const towelsHTML = generateListHTML(calculated.towels, "タオル類");
-            const serverHTML = generateListHTML(calculated.server, "ミニサーバー");
-            const othersHTML = generateListHTML(calculated.others, "その他");
+            addNormalCategory(calculated.washroom, "洗面所");
+            addNormalCategory(calculated.toilet, "トイレ");
+            addNormalCategory(calculated.fourSet, "4点セット");
+            addNormalCategory(calculated.towels, "タオル類");
+            addNormalCategory(calculated.server, "ミニサーバー");
+            addNormalCategory(calculated.others, "その他");
 
-            let finalChecklistHTML = '';
+            // 3. 最終仕上げ点検（点検文字なし、青ハイライト復元）
             if (calculated.finalCheck && calculated.finalCheck.length > 0) {
-                finalChecklistHTML += `
-                    <div class="mb-3.5">
+                let html = `
+                    <div>
                         <span class="text-xs text-gold-900 font-black bg-gold-200 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">客室の最終仕上げ点検</span>
                         <div class="space-y-1.5 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">
                 `;
@@ -2093,23 +2118,22 @@
                     displayName = displayName.replace(/（([^）]+)）/g, '<span class="text-red-600 font-extrabold">（$1）</span>');
                     displayName = displayName.replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
 
-                    finalChecklistHTML += `
+                    html += `
                         <label class="flex items-start gap-3 py-2 px-1.5 cursor-pointer hover:bg-slate-50 rounded-md transition-colors border-b border-dashed border-slate-100 last:border-none">
                             <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '${categoryName}', ${idx})" class="w-5 h-5 mt-0.5 rounded border-2 border-gold-300 text-gold-800 focus:ring-gold-700 accent-gold-600 shrink-0">
-                            <div class="text-sm ${room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : 'text-slate-800 font-black'} flex items-start flex-wrap gap-1 leading-normal serif-regular">
-                                <span class="bg-gold-50 text-gold-800 border border-gold-200 px-1.5 py-0.5 rounded text-[10px] font-black shrink-0 leading-none inline-block font-sans">点検</span>
-                                <span class="flex-1 keep-word">${displayName}</span>
+                            <div class="text-sm ${room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : 'text-slate-800 font-black'} flex-1 keep-word leading-normal serif-regular">
+                                ${displayName}
                             </div>
                         </label>
                     `;
                 });
-                finalChecklistHTML += `</div></div>`;
+                html += `</div></div>`;
+                activeCategoriesHTML.push(html);
             }
 
             // カウンターアイテムのレンダリング。低頻度アメニティは一目でわかるように色変更
             const renderCounterItem = (type, label, subText) => {
                 const count = room.guests[type] || 0;
-                // JとTは使用頻度が低いため、薄い紫ベースの背景色にして一目で区別できるようにする
                 const isLowFrequency = (type === 'j' || type === 't');
                 const bgClass = isLowFrequency 
                     ? 'bg-purple-50/90 border-purple-200 ring-1 ring-purple-100' 
@@ -2178,15 +2202,9 @@
                         </div>
                     </div>
 
-                    <div class="space-y-1">
-                        ${preCheckHTML}
-                        ${washroomHTML}
-                        ${toiletHTML}
-                        ${fourSetHTML}
-                        ${towelsHTML}
-                        ${serverHTML}
-                        ${othersHTML}
-                        ${finalChecklistHTML}
+                    <!-- 有効なアメニティカテゴリだけを美しい16pxマージンで連結して表示 -->
+                    <div class="space-y-4">
+                        ${activeCategoriesHTML.join('')}
                     </div>
 
                     <div class="space-y-3.5 pt-3.5 border-t border-slate-200/80">
@@ -2237,7 +2255,7 @@
             card.innerHTML = `
                 <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <div class="flex items-center gap-3">
-                        <div class="w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black ${isCompleted ? 'bg-emerald-100 text-emerald-950' : 'bg-gradient-to-b from-gold-450 to-gold-500 text-slate-950'} shadow-sm">
+                        <div class="w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black ${isCompleted ? 'bg-emerald-100 text-emerald-950' : 'bg-gradient-to-b from-gold-500 to-gold-400 text-slate-950'} shadow-sm">
                             <span class="text-[10px] font-bold leading-none font-sans">${escapeHTML(activeRoom.floor)}</span>
                             <span class="text-xl font-black leading-tight mt-0.5 font-sans">${escapeHTML(activeRoom.number)}</span>
                         </div>
@@ -2431,7 +2449,6 @@
             const diffX = clientX - touchStartX;
             const diffY = clientY - touchStartY;
 
-            // 縦スクロールを邪魔しないよう横スワイプのみ検知
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 e.preventDefault(); 
                 let moveX = Math.max(-80, Math.min(0, diffX)); 
@@ -2453,7 +2470,6 @@
             currentSwipeElem = null;
         }
 
-        // マウスを乗せ、少しクリックドラッグした際にも対応 (Windows / macOS)
         function handleMouseDown(e) {
             const item = e.currentTarget;
             const swipeContent = item.querySelector('.swipe-content');
@@ -2501,7 +2517,7 @@
                 updateDashboard();
 
                 if (state.currentTab === 'prep') renderRoomsList();
-                else renderBedmakingView();
+                else if (state.currentTab === 'bed') renderBedmakingView();
                 
                 showToast(`${room.number}号室をリストから削除しました`, "info");
             });
@@ -2515,7 +2531,7 @@
                 saveStateToLocalStorage();
                 renderSidebarAccordion();
                 if (state.currentTab === 'prep') renderRoomsList();
-                else renderBedmakingView();
+                else if (state.currentTab === 'bed') renderBedmakingView();
                 updateDashboard();
                 showToast("リストをすべてリセットしました", "info");
             });
@@ -2679,7 +2695,6 @@
                 roomsToAdd = [inputVal];
             }
 
-            // 個別手動入力（一括コマンド以外の1室個別指定）で美春閣データベースに存在しない番号の場合は弾く
             if (roomsToAdd.length === 1 && !ROOM_DATABASE[roomsToAdd[0]]) {
                 showToast("⚠︎ 登録エラー: 未登録の客室番号のため確認リストへ登録できません", "warning");
                 return;
@@ -2738,7 +2753,7 @@
                 updateDashboard();
 
                 if (state.currentTab === 'prep') renderRoomsList();
-                else renderBedmakingView();
+                else if (state.currentTab === 'bed') renderBedmakingView();
 
                 showToast(`${addedCount}室 を確認リストに追加しました！`);
             } else if (skipCount > 0) {
@@ -2751,18 +2766,55 @@
             document.getElementById('room-detection-indicator').classList.add('hidden');
         }
 
-        // SWによるオフラインサポート
+        // SWによるオフラインサポート（安定版）
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swCode = `
-                    const CACHE_NAME = 'biharaku-offline-v15';
-                    const urlsToCache = [location.pathname, location.href];
-                    self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))); });
-                    self.addEventListener('fetch', event => { event.respondWith(caches.match(event.request).then(res => res || fetch(event.request).catch(() => caches.match(location.pathname)))); });
+                    const CACHE_NAME = 'biharaku-offline-v20-secured';
+                    const urlsToCache = [
+                        location.pathname,
+                        location.href,
+                        'https://cdn.tailwindcss.com',
+                        'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;600;700;900&display=swap'
+                    ];
+
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME).then(cache => {
+                                return cache.addAll(urlsToCache);
+                            })
+                        );
+                    });
+
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request).then(response => {
+                                if (response) {
+                                    return response;
+                                }
+                                return fetch(event.request).then(networkResponse => {
+                                    if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                                        return networkResponse;
+                                    }
+                                    const responseToCache = networkResponse.clone();
+                                    caches.open(CACHE_NAME).then(cache => {
+                                        cache.put(event.request, responseToCache);
+                                    });
+                                    return networkResponse;
+                                }).catch(() => {
+                                    return caches.match(location.pathname);
+                                });
+                            })
+                        );
+                    });
                 `;
                 const blob = new Blob([swCode], { type: 'application/javascript' });
                 const swUrl = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(swUrl).then(() => console.log('オフライン対応有効')).catch(err => console.warn('オフライン無効:', err));
+                navigator.serviceWorker.register(swUrl).then(() => {
+                    console.log('美春閣システム: オフライン対応化（動的CDNキャッシュ）完了');
+                }).catch(err => {
+                    console.warn('オフライン無効:', err);
+                });
             });
         }
 
