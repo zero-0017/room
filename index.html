@@ -140,7 +140,8 @@
             <header class="bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-950 text-white px-3 ios-safe-header pb-4 kumiko-border">
                 <div class="max-w-7xl mx-auto flex items-center justify-between relative min-h-[44px]">
                     <div class="flex items-center gap-3">
-                        <button onclick="toggleSidebar(true)" class="p-2 -ml-2 rounded-xl hover:bg-emerald-800/30 active:bg-emerald-800/50 transition-colors relative md:hidden" aria-label="客室メニューを開く">
+                        <!-- 【修正点①】md:hidden から lg:hidden に変更。PC以外のiPad/タブレットサイズすべてでメニューボタンを出します -->
+                        <button onclick="toggleSidebar(true)" class="p-2 -ml-2 rounded-xl hover:bg-emerald-800/30 active:bg-emerald-800/50 transition-colors relative lg:hidden" aria-label="客室メニューを開く">
                             <svg class="w-6 h-6 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
@@ -158,7 +159,7 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <!-- メモ帳ボタン（全端末で表示するように lg:hidden を削除） -->
+                        <!-- メモ帳ボタン（全端末共通） -->
                         <button onclick="toggleMemo(true)" class="p-2 rounded-xl hover:bg-emerald-800/30 active:bg-emerald-800/50 transition-colors relative" aria-label="メモ帳を開く">
                             <svg class="w-6 h-6 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -186,8 +187,9 @@
         </div>
 
         <!-- サイドメニュー (全端末共通ドロワー) -->
+        <!-- 【修正点②】md:hidden から lg:hidden に変更。PC以外のiPad/タブレットサイズすべてで動作可能にします -->
         <div id="sidebar-overlay" onclick="toggleSidebar(false)" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
-        <aside id="sidebar" class="fixed top-0 left-0 w-[300px] h-full bg-slate-950 text-slate-100 z-50 shadow-2xl sidebar-transition -translate-x-full flex flex-col border-r border-slate-800 md:hidden">
+        <aside id="sidebar" class="fixed top-0 left-0 w-[300px] h-full bg-slate-950 text-slate-100 z-50 shadow-2xl sidebar-transition -translate-x-full flex flex-col border-r border-slate-800 lg:hidden">
             <div class="px-4 pb-4 pt-[calc(env(safe-area-inset-top,0px)+1.2rem)] bg-slate-900 border-b border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-2">
                     <span class="w-1.5 h-5 bg-gradient-to-b from-gold-300 to-gold-500 rounded-sm"></span>
@@ -228,7 +230,7 @@
             <div class="p-3 bg-[#F2EDE0] text-center text-xs text-gold-850 font-bold border-t border-gold-200 serif-title">データは端末内に自動保存されます</div>
         </aside>
 
-        <!-- メインレスポンシブコンテナ (幅を95%に拡大) -->
+        <!-- メインレスポンシブコンテナ (幅を98%に拡大し、両端の無駄な余白を削減) -->
         <div class="w-full max-w-[98%] xl:max-w-[1400px] mx-auto p-3 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
             <!-- PC/iPad専用：常時表示のサイドインデックス -->
@@ -245,7 +247,7 @@
 
             <!-- メイン点検ワークスペース -->
             <section class="col-span-1 lg:col-span-9 space-y-4">
-                <!-- 客室の追加パネル -->
+                <!-- 客室の追加パネル (アコーディオン動作はそのまま、余計な「開く/閉じる」テキストのみを排除) -->
                 <div id="add-room-outer-panel" class="bg-white rounded-2xl shadow-md border border-slate-200/80">
                     <button onclick="toggleAddRoomPanel()" class="w-full px-4 py-3.5 flex items-center justify-between text-left focus:outline-none rounded-2xl">
                         <h2 class="text-sm font-black text-emerald-950 flex items-center gap-1.5 tracking-wider uppercase serif-title">
@@ -253,7 +255,6 @@
                             客室の追加・一括登録パネル
                         </h2>
                         <div class="flex items-center gap-1.5">
-                            <span id="panel-toggle-badge" class="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-black serif-title">開く</span>
                             <svg id="panel-toggle-arrow" class="w-5 h-5 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
                             </svg>
@@ -292,8 +293,8 @@
                         </div>
                         <div class="space-y-1">
                             <p class="font-bold text-slate-700 text-sm serif-title">登録された客室がありません</p>
-                            <p class="text-xs text-slate-400 mx-auto leading-relaxed serif-title">
-                                上の登録パネルから客室番号を入力して<br>客室を登録してください。
+                            <p class="text-xs text-slate-400 mx-auto leading-relaxed serif-title text-center">
+                                上の登録パネルから客室番号を入力して客室を登録してください。
                             </p>
                         </div>
                     </div>
@@ -317,7 +318,7 @@
             </section>
         </div>
 
-        <!-- 本日の用意するリネン【合計】 フローティングパネル -->
+        <!-- 本日の用意するリネン【合計】 フローティングパネル (開く閉じるテキストのみを排除) -->
         <div id="sticky-linen-footer" class="fixed bottom-4 left-4 right-4 lg:left-[calc(25%+1rem)] lg:right-4 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-2 border-gold-300 shadow-2xl z-40 rounded-2xl hidden transition-all duration-300">
             <button onclick="toggleLinenTotalPanel()" class="w-full flex items-center justify-between px-4 py-3.5 focus:outline-none rounded-2xl">
                 <h3 class="font-serif font-black text-xs sm:text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
@@ -327,7 +328,6 @@
                     本日用意するリネン【合計】
                 </h3>
                 <div class="flex items-center gap-2">
-                    <span id="linen-toggle-badge" class="text-[10px] bg-gold-300/20 text-gold-300 border border-gold-300/30 px-2 py-0.5 rounded font-black font-serif">開く</span>
                     <svg id="linen-toggle-arrow" class="w-5 h-5 text-gold-300 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
                     </svg>
@@ -359,7 +359,6 @@
                     <span class="text-[10px] text-gold-300 font-bold serif-title">敷きシーツ (W)</span>
                     <div class="text-right mt-0.5"><span class="text-xl font-black text-gold-300" id="total-shiki-w">0</span><span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span></div>
                 </div>
-                <!-- 枕カバーを藤色（Fuchsia）に強調変更 -->
                 <div class="bg-slate-900/80 p-2 rounded-lg border border-slate-800 flex flex-col justify-between">
                     <span class="text-[10px] text-fuchsia-300 font-bold serif-title">枕カバー (通常)</span>
                     <div class="text-right mt-0.5"><span class="text-xl font-black text-fuchsia-300" id="total-pillow">0</span><span class="text-[9px] text-slate-500 font-semibold ml-0.5">枚</span></div>
@@ -372,7 +371,7 @@
         </div>
     </div>
 
-    <!-- オープニングスクリーン (初期から全画面を覆う) -->
+    <!-- オープニングスクリーン -->
     <div id="opening-screen" class="fixed inset-0 z-[100] transition-opacity duration-1000 pointer-events-auto cursor-pointer flex items-center justify-center bg-emerald-950">
         <div class="absolute inset-0 bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-950 slash-curtain-left washi-pattern border-r border-gold-300/20"></div>
         <div class="absolute inset-0 bg-gradient-to-br from-slate-950 via-emerald-900 to-emerald-950 slash-curtain-right washi-pattern border-l border-gold-300/20"></div>
@@ -603,9 +602,10 @@
 
         function getUnit(name) {
             if (!name) return "個";
-            if (name.includes("羽織")) return "着"; // 羽織は着に変更
-            if (name.includes("コーヒー系") || name.includes("湯呑み＆茶パック") || name.includes("種類")) return "セット";
-            if (name.includes("足袋")) return "個";
+            if (name.includes("羽織")) return "着"; // 羽織の単位を「着」に変更
+            if (name.includes("コーヒー系") || name.includes("湯呑み＆茶パック")) return "セット"; // 「〜セット」表記に統一
+            if (name.includes("種類")) return "セット";
+            if (name.includes("足袋")) return "足";
             if (name.includes("シーツ") || name.includes("カバー") || name.includes("タオル") || name.includes("マット") || name.includes("用紙") || name.includes("ペーパー") || name.includes("バッグ") || name.includes("帯")) return "枚";
             if (name.includes("スリッパ")) return "足";
             if (name.includes("座椅子") || name.includes("座布団") || name.includes("セット")) return "組";
@@ -705,29 +705,29 @@
             const checks = [
                 { name: "トイレ (帯・三角折り・ゴミの有無)" },
                 { name: "トイレットペーパー (2~3cmは交換)" },
-                { name: "羽織 (汚れ＆ポケットや袖に忘れ物の有無)" },
-                { name: "金庫 (忘れ物＆チェーン確認)" },
-                { name: "置時計 (必ずアラームOFF)" },
-                { name: "鏡 (汚れや手垢除去)" },
-                { name: "ゴミ箱 (ゴミ袋を新しいものに交換)" },
-                { name: "ティッシュ (三角折り＆残量十分)" },
-                { name: "窓 (蜘蛛の巣・窓ガラス汚れ除去)" },
-                { name: "下駄箱上 (不用物や忘れ物の有無)" },
-                { name: "冷蔵庫 (汚れ・水残り・忘れ物チェック)" },
-                { name: "電気ケトル (水残りチェック)" },
-                { name: "コーヒーメーカー (汚れ・水残り・カートリッジチェック)" }
+                { name: "羽織 (汚れ・ポケットや袖の忘れ物)" },
+                { name: "金庫 (忘れ物・チェーン)" },
+                { name: "置時計 (アラームOFF)" },
+                { name: "鏡 (汚れ・手垢)" },
+                { name: "ゴミ箱 (ゴミ袋交換)" },
+                { name: "ティッシュ (三角折り・残量十分)" },
+                { name: "窓 (蜘蛛の巣・汚れ)" },
+                { name: "下駄箱上 (不用物・忘れ物)" },
+                { name: "冷蔵庫 (汚れ・水残り・忘れ物)" },
+                { name: "電気ケトル (水残り)" },
+                { name: "コーヒーメーカー (汚れ・水残り・カートリッジ)" }
             ];
 
             if (['5F_2', '6F_1', '7F_1', '7F_2', 'KANGETSUTEI'].includes(rule)) {
-                checks.push({ name: "ボールペン (所定位置にあり、書けるか確認)" });
-                checks.push({ name: "アンケート用紙 (シワのない新品を配置)" });
-                checks.push({ name: "化粧鏡 (両面の汚れと手垢除去)" });
+                checks.push({ name: "ボールペン (所定位置・使用可能)" });
+                checks.push({ name: "アンケート用紙 (新品)" });
+                checks.push({ name: "化粧鏡 (両面の汚れ・手垢)" });
             }
             if ( (rule === '4F' && !['401', '406', '407'].includes(number)) || rule === '6F_2' || rule === '7F_2' || rule === 'KANGETSUTEI' ) {
-                checks.push({ name: "テーブルランプ (ホコリ拭き)" });
+                checks.push({ name: "テーブルランプ (ホコリ)" });
             }
             if ( (rule === '4F' && number !== '405') || rule === '6F_2' ) {
-                checks.push({ name: "ミニサーバーのガラス扉 (汚れや手垢除去)" });
+                checks.push({ name: "ミニサーバーのガラス扉 (汚れ・手垢)" });
             }
             return checks;
         }
@@ -761,8 +761,7 @@
                 let towels = [{ name: "フェイスタオル", qty: qty }];
                 if (isBathInRoom) towels.unshift({ name: "バスタオル", qty: qty });
                 towels.push({ name: "足袋", qty: qty });
-                // 警告マークを消す
-                let others = [{ name: "1名ずつランドリーバックに入れてドアノブに掛ける", qty: 1 }];
+                let others = [{ name: "ランドリーバックに入れてドアノブに掛ける", qty: 1, note: "1名ずつ用意" }];
                 return { preCheck: [], washroom, toilet: [], fourSet, towels, server: [], others, finalCheck: [] };
             }
 
@@ -775,8 +774,8 @@
                 const coffeeQty = adultBase; 
                 const haoriQty = adultBase + a;
 
-                if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
-                if (hasBeds) result.preCheck.push({ name: "ベッドメイク注意 : ベッドシーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認 (水残り・髪の毛)", qty: 1, isWarning: true });
+                if (hasBeds) result.preCheck.push({ name: "シーツ類・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true }); // ベッドメイク注意文言の変更
 
                 result.washroom = [ { name: "コップ", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" } ];
                 if (isBathInRoom) result.washroom.push({ name: "バスマット", qty: 1, note: "※403, 405のみ" });
@@ -800,7 +799,7 @@
                 if (number === '406') { needSheets = true; sheetQty = adult_A_B_C * 2; } 
                 else { if (total >= 3) { needSheets = true; sheetQty = total; } }
 
-                if (needSheets && sheetQty > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: sheetQty, note: number === '406' ? "406号室人数×2枚" : "3人以上時敷シーツ追加(入れ忘れ注意)" });
+                if (needSheets && sheetQty > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: sheetQty, note: "(3人以上、敷きシーツ準備)" }); // 注記変更
                 if (number === '406' && hasSakiZuki) result.others.push({ name: "⚠︎先敷忘れ注意", qty: 1, note: "J・T対象", isWarning: true, isRed: true });
             }
 
@@ -820,7 +819,7 @@
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
                 result.server = [
-                    { name: "ティーパック 4種類", qty: 1, note: "1セット" },
+                    { name: "ティーパック 3種類", qty: 1, note: "1セット" },
                     { name: "茶パック", qty: isAdultAlone ? 2 : teaPackCount, note: isAdultAlone ? "大人1名のみ : 2個" : "2人以下2個 / 3人以上人数分" },
                     { name: "湯呑み＆茶パック", qty: teaCupQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
                     { name: "ティーカップ", qty: teaCupQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
@@ -834,7 +833,7 @@
                 result.others = [ { name: "スリッパ 《大人用フラットタイプ》", qty: slipQty, note: slipperNote }, { name: "ミネラルウォーター", qty: adult_A_B, note: "大人・AとB" } ];
                 if (!isNoStay) result.others.push({ name: "茶菓子", qty: 1 });
                 
-                const calculatedShikiQty = is522 ? adult_A_B_C : (adult_A_B_C * 2);
+                const calculatedShikiQty = is522 ? adult_A_B_C : (calculatedShiki = adult_A_B_C * 2);
                 result.others.push(
                     { name: "座椅子＆座布団", qty: zabutonQty, note: isAdultAlone ? "大人1名のみ : 2組" : "大人・AとBの人数分" },
                     { name: "羽織", qty: haoriQty, note: isAdultAlone ? "大人1名のみ : 2着" : "大人・Aの人数分" },
@@ -847,7 +846,7 @@
             else if (['5F_2', '6F_1', '7F_1'].includes(rule)) {
                 const adultSuiteBase = (adult > 0) ? 2 : 0; 
                 result.preCheck.push({ name: "浴室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・ベッドシーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "シーツ類・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true }); // ベッドメイク注意文言の変更
 
                 result.washroom = [ { name: "コップ 《透明 or スモーク》", qty: adultSuiteBase }, { name: "歯ブラシ", qty: adult, note: "大人" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
                 result.toilet = [ { name: "フェイスタオル", qty: 1, note: "トイレ用" } ];
@@ -876,7 +875,7 @@
                 const haoriQty = adultBase + a;
 
                 if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・シーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "シーツ類・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true }); // ベッドメイク注意文言の変更
 
                 result.washroom = [ { name: "コップ", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" } ];
                 if (isBathInRoom) result.washroom.push({ name: "バスマット", qty: 1, note: "※606~617のみ" });
@@ -906,7 +905,7 @@
                 const haoriQty = adultBase + a;
 
                 result.preCheck.push({ name: "浴室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "ベッドメイク注意 : シーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "シーツ類・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true }); // ベッドメイク注意文言の変更
 
                 result.washroom = [ { name: "コップ 《透明 or スモーク》", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
                 result.toilet = [ { name: "フェイスタオル", qty: 1, note: "トイレ用" } ];
@@ -933,7 +932,7 @@
                     { name: "羽織", qty: haoriQty, note: isAdultAlone ? "大人1名のみ : 2着" : "大人・Aの人数分" }
                 );
 
-                if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "特別室: 人数分" });
+                if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "(3人以上、敷きシーツ準備)" }); // 注記変更
                 if (is705) result.others.push({ name: "重要：マッサージチェアの主電源ON (壁の照明スイッチ付近)", qty: 1, isWarning: true, isRed: true });
             }
 
@@ -946,7 +945,7 @@
 
                 result.preCheck.push({ name: "シャワー室の使用有無確認 (水残り＆髪の毛)", qty: 1, isWarning: true });
                 result.preCheck.push({ name: "露天風呂の使用有無確認 (水残り＆髪の毛＆水抜き)", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "ベッドメイク注意 : 布団カバー・ベッドシーツ・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "シーツ類・枕カバーの汚れや髪の毛を敷く前後にダブルチェック", qty: 1, isWarning: true }); // ベッドメイク注意文言の変更
 
                 result.washroom = [ { name: "コップ 《透明 or スモーク》", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "ロクシタン 4種類", qty: adult > 0 ? 1 : 0, note: "シャンプー ➡︎ コンディショナー ➡︎ シャワージェル ➡︎ ボディローション" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
                 result.toilet = [ { name: "フェイスタオル", qty: 1, note: "トイレ用" } ];
@@ -975,9 +974,9 @@
                 if (number === "157") {
                     let calculatedShiki = adult_A_B_C;
                     if (total >= 3) { calculatedShiki = adult_A_B_C * 2; }
-                    if (calculatedShiki > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: calculatedShiki, note: "157: 3人以上敷シーツ2倍" });
+                    if (calculatedShiki > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: calculatedShiki, note: "3人以上、敷きシーツ準備" }); // 注記変更
                 } else if (number === "257") {
-                    if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "257洋室: 人数分" });
+                    if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: calculatedShiki, note: "3人以上、敷きシーツ準備" }); // 注記変更
                 }
             }
 
@@ -1003,9 +1002,8 @@
             state.linenPanelOpen = !state.linenPanelOpen;
             const container = document.getElementById('linen-total-content');
             const arrow = document.getElementById('linen-toggle-arrow');
-            const badge = document.getElementById('linen-toggle-badge');
-            if (state.linenPanelOpen) { container.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; badge.textContent = '閉じる'; } 
-            else { container.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; badge.textContent = '開く'; }
+            if (state.linenPanelOpen) { container.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; } 
+            else { container.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
             saveStateToLocalStorage();
         }
 
@@ -1013,9 +1011,8 @@
             state.addPanelOpen = !state.addPanelOpen;
             const container = document.getElementById('add-room-form-container');
             const arrow = document.getElementById('panel-toggle-arrow');
-            const badge = document.getElementById('panel-toggle-badge');
-            if (state.addPanelOpen) { container.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; badge.textContent = '閉じる'; } 
-            else { container.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; badge.textContent = '開く'; }
+            if (state.addPanelOpen) { container.classList.remove('hidden'); arrow.style.transform = 'rotate(180deg)'; } 
+            else { container.classList.add('hidden'); arrow.style.transform = 'rotate(0deg)'; }
         }
 
         function saveMemo() {
@@ -1182,7 +1179,6 @@
             });
         }
 
-        // ⑩アコーディオン状態の正確な反転（バグ修正済）
         function toggleGroupAccordion(groupName) {
             if (!state.expandedGroups) state.expandedGroups = { "本館": true, "観月亭": true };
             const current = state.expandedGroups[groupName] !== false;
@@ -1203,8 +1199,12 @@
             state.activeRoomId = id;
             saveStateToLocalStorage();
             toggleSidebar(false); 
-            if (state.currentTab === 'prep') renderRoomsList();
-            else if (state.currentTab === 'bed') renderBedmakingView();
+
+            if (state.currentTab === 'prep') {
+                renderRoomsList();
+            } else if (state.currentTab === 'bed') {
+                renderBedmakingView();
+            }
             updateDashboard();
             renderSidebarAccordion();
         }
@@ -1227,13 +1227,13 @@
                 btnPrep.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
                 contentPrep.classList.remove('hidden');
                 addRoomPanel.classList.remove('hidden');
-                stickyFooter.classList.add('hidden'); // 点検タブ時はリネン合計を隠す
+                stickyFooter.classList.add('hidden'); 
                 renderRoomsList();
             } else if (tabId === 'bed') {
                 btnBed.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
                 contentBed.classList.remove('hidden');
-                addRoomPanel.classList.add('hidden'); // ③リネンタブ時は客室追加パネルを非表示
-                stickyFooter.classList.remove('hidden'); // リネンタブ時のみ表示
+                addRoomPanel.classList.add('hidden'); 
+                stickyFooter.classList.remove('hidden'); 
                 renderBedmakingView();
             }
         }
@@ -1339,7 +1339,7 @@
                 } else {
                     cardBody.className = "bg-red-50/40 border-2 border-red-200 p-4 rounded-2xl shadow-sm space-y-4 transition-all duration-300";
                     statusBanner.className = "py-3 px-4 bg-[#cc3333] text-white rounded-lg text-xs font-bold text-center shadow-sm serif-title";
-                    // ② PCとスマホで改行表示を切り替えるレスポンシブな警告バナー
+                    // PCとスマホで改行表示を切り替えるレスポンシブな警告バナー
                     statusBanner.innerHTML = `<span class="hidden sm:inline">⚠ まだ未確認の項目があります。点検を続けてください。</span><span class="sm:hidden">⚠ まだ未確認の項目があります。<br>点検を続けてください。</span>`;
                     warningAlert.classList.remove('hidden');
                 }
@@ -1439,7 +1439,12 @@
                 let html = `<div><span class="text-xs text-gold-900 font-black bg-gold-200 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">客室の最終仕上げ点検</span><div class="space-y-1.5 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">`;
                 calculated.finalCheck.forEach((item, idx) => {
                     const key = `最終仕上げ_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
-                    let displayName = escapeHTML(item.name).replace(/\(([^)]+)\)/g, '<span class="text-red-600 font-extrabold">($1)</span>').replace(/（([^）]+)）/g, '<span class="text-red-600 font-extrabold">（$1）</span>').replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
+                    
+                    // 最終点検項目の ( ) を自動改行化 & 文字を小さく調整
+                    let displayName = escapeHTML(item.name);
+                    displayName = displayName.replace(/[\(（]([^\)）]+)[\)）]/g, '<br><span class="text-[11.5px] text-slate-500 font-bold block mt-0.5">($1)</span>');
+                    displayName = displayName.replace(/&lt;(.*?)&gt;/g, '<span class="text-blue-600 font-bold">《$1》</span>');
+                    
                     html += `<label class="flex items-start gap-3 py-2 px-1.5 cursor-pointer hover:bg-slate-50 rounded-md transition-colors border-b border-dashed border-slate-100 last:border-none">
                             <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '最終仕上げ', ${idx})" class="w-5 h-5 mt-0.5 rounded border-2 border-gold-300 text-gold-800 focus:ring-gold-700 accent-gold-600 shrink-0">
                             <div class="text-sm ${room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : 'text-slate-800 font-black'} flex-1 keep-word leading-normal serif-regular">${displayName}</div>
@@ -1544,7 +1549,7 @@
                             <span id="guest-total-${activeRoom.id}" class="text-xs text-slate-500 font-bold mt-0.5 serif-title">定員: ${activeRoom.capacity}名 / 実人数: ${getTotalGuests(activeRoom)}名</span>
                         </div>
                     </div>
-                    <button onclick="toggleSidebar(true)" class="bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 px-3 py-2 rounded-xl border border-slate-200 transition-colors flex items-center gap-1 select-none md:hidden serif-title">
+                    <button onclick="toggleSidebar(true)" class="bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 px-3 py-2 rounded-xl border border-slate-200 transition-colors flex items-center gap-1 select-none lg:hidden serif-title">
                         <span>客室切替</span>
                         <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
                     </button>
@@ -1562,7 +1567,6 @@
             if (!container) return;
 
             if (state.rooms.length === 0) {
-                // ⑤ 登録された客室がありません。の改行
                 container.innerHTML = `<div class="bg-white rounded-2xl p-6 text-center border border-slate-200 text-slate-400 text-xs font-bold leading-relaxed serif-title">登録された客室がありません。<br>上の登録パネルから客室番号を入力して<br>客室を登録してください。</div>`;
                 resetLinenTotals();
                 return;
@@ -1638,7 +1642,7 @@
 
         function deleteRoom(id, event) {
             if (event) event.stopPropagation();
-            const room = state.rooms.find(r => r.id === id);
+            const room = state.rooms.find(r => r.id !== undefined && r.id === id);
             if (!room) return;
             showCustomConfirm("登録削除", `${room.number}号室を点検リストから削除しますか？`, () => {
                 state.rooms = state.rooms.filter(r => r.id !== id);
@@ -1679,21 +1683,44 @@
                 const room = ROOM_DATABASE[inputVal]; indicator.className = "text-xs p-2.5 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 font-black"; indicator.innerHTML = `【検出】 ${escapeHTML(room.building)} ${escapeHTML(room.floor)} (${escapeHTML(room.remarks)}) - 定員${room.capacity}名`;
             } else if (['全室', 'ぜんしつ', 'ALL'].includes(inputVal)) {
                 indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 実在する全客室 (${Object.keys(ROOM_DATABASE).length}客室) を一括登録します。`;
+            } else if (inputVal === '1F' || inputVal === '1階') {
+                const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "1階");
+                indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 観月亭 西館1階 の全 ${matchedRooms.length} 客室を一括登録します。`;
+            } else if (inputVal === '2F' || inputVal === '2階') {
+                const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => (ROOM_DATABASE[key].building === "はなれ西館" || ROOM_DATABASE[key].building === "東館") && ROOM_DATABASE[key].floor === "2階");
+                indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 観月亭 西館＆東館2階 の全 ${matchedRooms.length} 客室を一括登録します。`;
+            } else if (['西2F', '西館2F', '西2階', '西館2階'].includes(inputVal)) {
+                const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "2階");
+                indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 観月亭 西館2階 の全 ${matchedRooms.length} 客室を一括登録します。`;
+            } else if (['東2F', '東館2F', '東2階', '東館2階'].includes(inputVal)) {
+                const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "東館" && ROOM_DATABASE[key].floor === "2階");
+                indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 観月亭 東館2階 の全 ${matchedRooms.length} 客室を一括登録します。`;
             } else if (/^(\d+)F$/.test(inputVal)) {
-                const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${inputVal.match(/^(\d+)F$/)[1]}階`);
-                if (matchedRooms.length > 0) { indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 本館 ${inputVal.match(/^(\d+)F$/)[1]}階 の全 ${matchedRooms.length} 客室を一括登録します。`; } 
-                else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎ 登録エラー: 未登録の客室番号美春閣の客室に存在しない番号です。`; }
+                const floorNum = inputVal.match(/^(\d+)F$/)[1];
+                const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${floorNum}階` && ROOM_DATABASE[key].building === "本館");
+                if (matchedRooms.length > 0) {
+                    indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 本館 ${floorNum}階 の全 ${matchedRooms.length} 客室を一括登録します。`;
+                } else {
+                    indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; 
+                    indicator.innerHTML = `⚠︎登録エラー：美春閣の客室に存在しない番号です。<br>確認リストへの登録はできません。`;
+                }
             } else if (/^(\d+)F\s*~\s*(\d+)F$/.test(inputVal)) {
                 const match = inputVal.match(/^(\d+)F\s*~\s*(\d+)F$/); const startF = parseInt(match[1], 10), endF = parseInt(match[2], 10);
-                let matchedRooms = []; for (let f = Math.min(startF, endF); f <= Math.max(startF, endF); f++) matchedRooms = matchedRooms.concat(Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${f}階`));
+                const startExists = Object.keys(ROOM_DATABASE).some(key => ROOM_DATABASE[key].floor === `${startF}階` && ROOM_DATABASE[key].building === "本館");
+                const endExists = Object.keys(ROOM_DATABASE).some(key => ROOM_DATABASE[key].floor === `${endF}階` && ROOM_DATABASE[key].building === "本館");
+                if (!startExists || !endExists) {
+                    indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; 
+                    indicator.innerHTML = `⚠︎登録エラー：美春閣の客室に存在しない番号です。<br>確認リストへの登録はできません。`; return;
+                }
+                let matchedRooms = []; for (let f = Math.min(startF, endF); f <= Math.max(startF, endF); f++) matchedRooms = matchedRooms.concat(Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${f}階` && ROOM_DATABASE[key].building === "本館"));
                 if (matchedRooms.length > 0) { indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: 本館 ${startF}階〜${endF}階 の全 ${matchedRooms.length} 客室を一括登録します。`; } 
-                else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎ 登録エラー: 未登録の客室番号美春閣の客室に存在しない番号です。`; }
+                else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎登録エラー：美春閣の客室に存在しない番号です。<br>確認リストへの登録はできません。`; }
             } else if (/^(\d+)\s*~\s*(\d+)$/.test(inputVal)) {
                 const match = inputVal.match(/^(\d+)\s*~\s*(\d+)$/); const startNum = parseInt(match[1], 10), endNum = parseInt(match[2], 10);
                 const matchedRooms = Object.keys(ROOM_DATABASE).filter(key => { const roomInt = parseInt(key, 10); return roomInt >= Math.min(startNum, endNum) && roomInt <= Math.max(startNum, endNum); });
                 if (matchedRooms.length > 0) { indicator.className = "text-xs p-2.5 rounded-xl border bg-amber-50 border-amber-300 text-amber-900 font-bold"; indicator.innerHTML = `一括検出: ${Math.min(startNum, endNum)}号室〜${Math.max(startNum, endNum)}号室の ${matchedRooms.length} 客室を一括登録します。`; } 
-                else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎ 登録エラー: 未登録の客室番号美春閣の客室に存在しない番号です。`; }
-            } else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎ 登録エラー: 未登録の客室番号美春閣の客室に存在しない番号です。`; }
+                else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎登録エラー：美春閣の客室に存在しない番号です。<br>確認リストへの登録はできません。`; }
+            } else { indicator.className = "text-xs p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-950 font-bold"; indicator.innerHTML = `⚠︎登録エラー：美春閣の客室に存在しない番号です。<br>確認リストへの登録はできません。`; }
         }
 
         function addRoom() {
@@ -1702,17 +1729,21 @@
 
             let roomsToAdd = [];
             if (['全室', 'ぜんしつ', 'ALL'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE); } 
-            else if (/^(\d+)F$/.test(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${inputVal.match(/^(\d+)F$/)[1]}階`); } 
+            else if (inputVal === '1F' || inputVal === '1階') { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "1階"); } 
+            else if (inputVal === '2F' || inputVal === '2階') { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => (ROOM_DATABASE[key].building === "はなれ西館" || ROOM_DATABASE[key].building === "東館") && ROOM_DATABASE[key].floor === "2階"); } 
+            else if (['西2F', '西館2F', '西2階', '西館2階'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "2階"); } 
+            else if (['東2F', '東館2F', '東2階', '東館2階'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "東館" && ROOM_DATABASE[key].floor === "2階"); } 
+            else if (/^(\d+)F$/.test(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${inputVal.match(/^(\d+)F$/)[1]}階` && ROOM_DATABASE[key].building === "本館"); } 
             else if (/^(\d+)F\s*~\s*(\d+)F$/.test(inputVal)) {
                 const match = inputVal.match(/^(\d+)F\s*~\s*(\d+)F$/); const startF = parseInt(match[1], 10), endF = parseInt(match[2], 10);
-                for (let f = Math.min(startF, endF); f <= Math.max(startF, endF); f++) roomsToAdd = roomsToAdd.concat(Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${f}階`));
+                for (let f = Math.min(startF, endF); f <= Math.max(startF, endF); f++) roomsToAdd = roomsToAdd.concat(Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].floor === `${f}階` && ROOM_DATABASE[key].building === "本館"));
             } else if (/^(\d+)\s*~\s*(\d+)$/.test(inputVal)) {
                 const match = inputVal.match(/^(\d+)\s*~\s*(\d+)$/); const startNum = parseInt(match[1], 10), endNum = parseInt(match[2], 10);
                 roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => { const roomInt = parseInt(key, 10); return roomInt >= Math.min(startNum, endNum) && roomInt <= Math.max(startNum, endNum); });
             } else { roomsToAdd = [inputVal]; }
 
-            if (roomsToAdd.length === 1 && !ROOM_DATABASE[roomsToAdd[0]]) { showToast("⚠︎ 登録エラー: 未登録の客室番号です", "warning"); return; }
-            if (roomsToAdd.length === 0) { showToast("⚠︎ 登録エラー: 該当する客室がありません", "warning"); return; }
+            if (roomsToAdd.length === 1 && !ROOM_DATABASE[roomsToAdd[0]]) { showToast("⚠︎登録エラー：美春閣の客室に存在しない番号です。確認リストへの登録はできません。", "warning"); return; }
+            if (roomsToAdd.length === 0) { showToast("⚠︎登録エラー：該当する客室がありません", "warning"); return; }
 
             let addedCount = 0, skipCount = 0;
             roomsToAdd.forEach(roomNum => {
@@ -1746,8 +1777,6 @@
             const openingScreen = document.getElementById('opening-screen');
             const mainContainer = document.getElementById('main-app-container');
             
-            // ⑧ iPad/iPhoneの起動時「白フラッシュ」の完全対策
-            // HTMLパース時点で画面は深緑(#022c22)になっており、そこからオープニングを消すことでチラつきを物理的に0にする
             if (sessionStorage.getItem('biharaku_opening_shown')) {
                 if(openingScreen) openingScreen.style.display = 'none';
                 document.body.classList.remove('overflow-hidden');
@@ -1770,11 +1799,9 @@
 
             const linenContainer = document.getElementById('linen-total-content');
             const linenArrow = document.getElementById('linen-toggle-arrow');
-            const linenBadge = document.getElementById('linen-toggle-badge');
             if (state.linenPanelOpen) {
                 if(linenContainer) linenContainer.classList.remove('hidden');
                 if (linenArrow) linenArrow.style.transform = 'rotate(180deg)';
-                if (linenBadge) linenBadge.textContent = '閉じる';
             }
 
             const cancelBtn = document.getElementById('confirm-modal-cancel'); const okBtn = document.getElementById('confirm-modal-ok');
