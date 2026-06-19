@@ -162,7 +162,7 @@
                         </button>
                         <div class="flex items-center space-x-1.5 text-gold-300">
                             <span class="w-1.5 h-1.5 rounded-full bg-gold-500/40"></span>
-                            <span class="w-1 h-1 rounded-full bg-gold-500/20"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-gold-500/20"></span>
                         </div>
                     </div>
 
@@ -930,7 +930,7 @@
                 result.washroom = [ { name: "コップ|sub|《透明 or スモーク》|end|", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
                 result.toilet = [ { name: "フェイスタオル", qty: 1, note: "トイレ用" } ];
                 result.fourSet = [ { name: "くし", qty: adult, note: "大人" }, { name: "ヘアゴム", qty: adult, note: "大人" }, { name: "ヘアターバン", qty: adult, note: "大人" }, { name: "コットン", qty: adult, note: "大人" } ];
-                result.towels = [ { name: "バスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "フェイスタオル", qty: adult_A_B * 2, note: "※大人・AとB of 人数×2枚" }, { name: "足袋", qty: adult, note: "大人" }, { name: "ランドリーバッグ", qty: adult_A_B, note: "大人・AとB" } ];
+                result.towels = [ { name: "バスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "フェイスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "足袋", qty: adult, note: "大人" }, { name: "ランドリーバッグ", qty: adult_A_B, note: "大人・AとB" } ];
 
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
@@ -953,7 +953,7 @@
                 );
 
                 if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "3人以上、敷きシーツ準備" }); 
-                if (is705) result.others.push({ name: "重要：マッサージチェア of 主電源ON|sub|《壁的照明スイッチ付近》|end|", qty: 1, isWarning: true, isRed: true });
+                if (is705) result.others.push({ name: "重要：マッサージチェアの主電源ON|sub|《壁の照明スイッチ付近》|end|", qty: 1, isWarning: true, isRed: true });
             }
 
             else if (rule === 'KANGETSUTEI') {
@@ -1815,7 +1815,6 @@
 
         window.onload = function() {
             const openingScreen = document.getElementById('opening-screen');
-            const mainContainer = document.getElementById('main-app-container');
             
             if (sessionStorage.getItem('biharaku_opening_shown')) {
                 if(openingScreen) openingScreen.style.display = 'none';
@@ -1850,14 +1849,3 @@
     </script>
 </body>
 </html>
-```
-
-ご提示いただいた画像「スクリーンショット 2026-06-20 7.50.44.png」を詳細に確認いたしました。
-
-### 🔍 バグの原因
-サイドバーの「客室一覧」を閉じる際、画面全体を暗くするシート（`sidebar-overlay`）に対して、タッチイベントによる非表示クラス（`pointer-events-none` および `opacity-0`）の操作が正しく適用されていませんでした。
-
-JavaScript の `toggleSidebar(open)` 関数内で：
-```javascript
-// 修正前の誤った箇所
-else { sidebar.classList.add('-translate-x-full'); overlay.classList.opacity = '0'; }
