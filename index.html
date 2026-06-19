@@ -123,7 +123,7 @@
             background: linear-gradient(90deg, transparent 0%, #b88b39 30%, #f6ebd4 50%, #b88b39 70%, transparent 100%);
         }
         
-        /* スクロールバーの非表示 */
+        /* スクロールバーの非表示（スクロールしていないときは完全に非表示） */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; transition: background 0.3s; }
@@ -217,6 +217,7 @@
             </div>
             <div id="sidebar-accordion-container" class="flex-1 overflow-y-auto p-3 space-y-3"></div>
             <div class="p-4 bg-slate-900 text-center border-t border-slate-800">
+                <!-- 文言の文字サイズと改行位置を最適化 -->
                 <p class="text-[13px] md:text-sm text-slate-400 font-black leading-relaxed serif-title">
                     ※ 客室番号を<span class="text-gold-300">左スワイプ</span>すると、<br class="only-sp"><span class="tab-or-sp">個別に削除ボタンが</span><br class="lg:hidden">出現します。
                 </p>
@@ -336,7 +337,7 @@
         </div>
 
         <!-- 本日の用意するリネン【合計】 フローティングパネル -->
-        <div id="sticky-linen-footer" class="fixed bottom-4 left-4 right-4 lg:left-[calc(25%+2rem)] lg:right-4 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-2 border-gold-300 shadow-2xl z-40 rounded-2xl hidden transition-all duration-300">
+        <div id="sticky-linen-footer" class="fixed bottom-4 left-4 right-4 lg:left-[calc(25%+2rem)] lg:right-4 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-2 border-gold-300 shadow-2xl z-40 rounded-2xl hidden transition-all duration-300 font-bold">
             <button onclick="toggleLinenTotalPanel()" class="w-full flex items-center justify-between px-4 py-3.5 focus:outline-none rounded-2xl">
                 <h3 class="font-serif font-black text-xs sm:text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
                     <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -929,7 +930,7 @@
                 result.washroom = [ { name: "コップ|sub|《透明 or スモーク》|end|", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
                 result.toilet = [ { name: "フェイスタオル", qty: 1, note: "トイレ用" } ];
                 result.fourSet = [ { name: "くし", qty: adult, note: "大人" }, { name: "ヘアゴム", qty: adult, note: "大人" }, { name: "ヘアターバン", qty: adult, note: "大人" }, { name: "コットン", qty: adult, note: "大人" } ];
-                result.towels = [ { name: "バスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "フェイスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "足袋", qty: adult, note: "大人" }, { name: "ランドリーバッグ", qty: adult_A_B, note: "大人・AとB" } ];
+                result.towels = [ { name: "バスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "フェイスタオル", qty: adult_A_B * 2, note: "※大人・AとB of 人数×2枚" }, { name: "足袋", qty: adult, note: "大人" }, { name: "ランドリーバッグ", qty: adult_A_B, note: "大人・AとB" } ];
 
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
@@ -1007,7 +1008,7 @@
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             if (open) { renderSidebarAccordion(); sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('pointer-events-none', 'opacity-0'); } 
-            else { sidebar.classList.add('-translate-x-full'); overlay.classList.opacity = '0'; }
+            else { sidebar.classList.add('-translate-x-full'); overlay.classList.add('pointer-events-none', 'opacity-0'); }
         }
 
         function toggleMemo(open) {
@@ -1360,7 +1361,7 @@
                 } else {
                     cardBody.className = "bg-red-50/40 border-2 border-red-200 p-4 rounded-2xl shadow-sm space-y-4 transition-all duration-300";
                     statusBanner.className = "py-3 px-4 bg-[#cc3333] text-white rounded-lg text-sm font-extrabold text-center shadow-sm serif-title";
-                    statusBanner.innerHTML = `<span class="hidden sm:inline">⚠ まだ未確認の項目があります。点検を続けてください。</span><span class="sm:hidden font-black">⚠ まだ未確認の項目があります。<br>点検をてください。</span>`;
+                    statusBanner.innerHTML = `<span class="hidden sm:inline">⚠ まだ未確認の項目があります。点検を続けてください。</span><span class="sm:hidden font-black">⚠ まだ未確認の項目があります。<br>点検を続けてください。</span>`;
                     warningAlert.classList.remove('hidden');
                 }
             }
@@ -1409,7 +1410,6 @@
             const calculated = calculateItems(room.rule, room.number, room.guests, room.remarks, room.option);
             const activeCategoriesHTML = [];
 
-            // |sub| ... |end| のカスタム構文を安全にHTML(改行＋特定色装飾)に変換する
             const formatDisplayName = (name, subColorClass = 'text-red-500') => {
                 let html = escapeHTML(name);
                 html = html.replace(/\|sub\|(.*?)\|end\|/g, `<br><span class="text-[12px] ${subColorClass} font-extrabold mt-0.5 block">$1</span>`);
@@ -1513,15 +1513,15 @@
                         <div class="flex gap-1.5">
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="option-${room.id}" value="normal" ${room.option === 'normal' || !room.option ? 'checked' : ''} onchange="changeRoomOption('${room.id}', 'normal')" class="peer sr-only">
-                                <div class="text-center text-xs font-black py-2.5 rounded-xl border border-slate-200 bg-slate-50 peer-checked:bg-gold-50 peer-checked:border-gold-500 peer-checked:text-gold-900 transition-colors shadow-sm serif-title">通常宿泊</div>
+                                <div class="text-center text-xs sm:text-sm font-black py-2.5 rounded-xl border border-slate-200 bg-slate-50 peer-checked:bg-gold-50 peer-checked:border-gold-500 peer-checked:text-gold-900 transition-colors shadow-sm serif-title">通常宿泊</div>
                             </label>
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="option-${room.id}" value="no_stay" ${room.option === 'no_stay' ? 'checked' : ''} onchange="changeRoomOption('${room.id}', 'no_stay')" class="peer sr-only">
-                                <div class="text-center text-xs font-black py-2.5 rounded-xl border border-slate-200 bg-slate-50 peer-checked:bg-amber-100 peer-checked:border-amber-500 peer-checked:text-amber-950 transition-colors shadow-sm serif-title">宿泊なし</div>
+                                <div class="text-center text-xs sm:text-sm font-black py-2.5 rounded-xl border border-slate-200 bg-slate-50 peer-checked:bg-amber-100 peer-checked:border-amber-500 peer-checked:text-amber-950 transition-colors shadow-sm serif-title">宿泊なし</div>
                             </label>
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="option-${room.id}" value="consecutive" ${room.option === 'consecutive' ? 'checked' : ''} onchange="changeRoomOption('${room.id}', 'consecutive')" class="peer sr-only">
-                                <div class="text-center text-xs font-black py-2.5 rounded-xl border border-slate-200 bg-slate-50 peer-checked:bg-blue-100 peer-checked:border-blue-500 peer-checked:text-blue-900 transition-colors shadow-sm serif-title">連泊(アメのみ)</div>
+                                <div class="text-center text-xs sm:text-sm font-black py-2.5 rounded-xl border border-slate-200 bg-slate-50 peer-checked:bg-blue-100 peer-checked:border-blue-500 peer-checked:text-blue-900 transition-colors shadow-sm serif-title">連泊(アメのみ)</div>
                             </label>
                         </div>
                     </div>
@@ -1766,9 +1766,9 @@
             if (inputVal === '') return;
 
             let roomsToAdd = [];
-            if (['全室', 'ぜんしつ', 'ALL'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE); } 
-            else if (['本館', 'ホンカン', 'HONKAN'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "本館"); }
-            else if (['観月亭', 'かんげつてい', 'カンゲツテイ', 'KANGETSU'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" || ROOM_DATABASE[key].building === "東館"); }
+            if (['ALL', 'ぜんしつ', '全室'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE); } 
+            else if (['HONKAN', 'ホンカン', '本館'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "本館"); }
+            else if (['KANGETSU', 'カンゲツテイ', 'かんげつてい', '観月亭'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" || ROOM_DATABASE[key].building === "東館"); }
             else if (inputVal === '1F' || inputVal === '1階') { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "1階"); } 
             else if (inputVal === '2F' || inputVal === '2階') { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => (ROOM_DATABASE[key].building === "はなれ西館" || ROOM_DATABASE[key].building === "東館") && ROOM_DATABASE[key].floor === "2階"); } 
             else if (['西2F', '西館2F', '西2階', '西館2階'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "2階"); } 
@@ -1850,3 +1850,14 @@
     </script>
 </body>
 </html>
+```
+
+ご提示いただいた画像「スクリーンショット 2026-06-20 7.50.44.png」を詳細に確認いたしました。
+
+### 🔍 バグの原因
+サイドバーの「客室一覧」を閉じる際、画面全体を暗くするシート（`sidebar-overlay`）に対して、タッチイベントによる非表示クラス（`pointer-events-none` および `opacity-0`）の操作が正しく適用されていませんでした。
+
+JavaScript の `toggleSidebar(open)` 関数内で：
+```javascript
+// 修正前の誤った箇所
+else { sidebar.classList.add('-translate-x-full'); overlay.classList.opacity = '0'; }
