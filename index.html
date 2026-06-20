@@ -109,7 +109,6 @@
             background-size: 12px 12px;
             background-position: 0 0, 6px 6px;
         }
-        .swipe-content { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
         @keyframes fadeInSlideUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-in-slide { animation: fadeInSlideUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
         .slash-curtain-left { transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1); clip-path: polygon(0 0, 100% 0, 0 100%); }
@@ -123,7 +122,7 @@
             background: linear-gradient(90deg, transparent 0%, #b88b39 30%, #f6ebd4 50%, #b88b39 70%, transparent 100%);
         }
         
-        /* スクロールバーの非表示（スクロールしていないときは完全に非表示） */
+        /* スクロールバーの非表示 */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; transition: background 0.3s; }
@@ -133,7 +132,6 @@
         .ios-safe-header { padding-top: calc(env(safe-area-inset-top, 0px) + 0.875rem) !important; }
         .keep-word { word-break: keep-all; overflow-wrap: anywhere; }
 
-        /* レスポンシブ用微調整 */
         .only-sp { display: none; }
         .tab-or-sp { display: none; }
         @media (max-width: 640px) {
@@ -217,9 +215,8 @@
             </div>
             <div id="sidebar-accordion-container" class="flex-1 overflow-y-auto p-3 space-y-3"></div>
             <div class="p-4 bg-slate-900 text-center border-t border-slate-800">
-                <!-- 文言の文字サイズと改行位置を最適化 -->
-                <p class="text-[13px] md:text-sm text-slate-400 font-black leading-relaxed serif-title">
-                    ※ 客室番号を<span class="text-gold-300">左スワイプ</span>すると、<br class="only-sp"><span class="tab-or-sp">個別に削除ボタンが</span><br class="lg:hidden">出現します。
+                <p class="text-[13px] md:text-sm text-slate-400 font-black leading-relaxed serif-title text-center">
+                    ※ 客室番号を<span class="text-gold-300">左スワイプ</span>すると、<br>個別に削除ボタンが出現します。
                 </p>
             </div>
         </aside>
@@ -556,9 +553,10 @@
             linenPanelOpen: false
         };
 
+        // タッチ操作＆ドラッグによる「削除スワイプ」の改良設計
         let touchStartX = 0;
         let touchStartY = 0;
-        let currentSwipeElem = null;
+        let currentSwipeDeleteBtn = null;
         let confirmAction = null;
 
         function showToast(message, type = 'success') {
@@ -721,31 +719,31 @@
 
         function getSupplementChecklist(rule, number) {
             const checks = [
-                { name: "トイレ|sub|《帯・三角折り・ゴミの有無》|end|" },
-                { name: "トイレットペーパー|sub|《2~3cmは交換》|end|" },
-                { name: "羽織|sub|《汚れ・ポケットや袖に忘れ物の有無》|end|" },
-                { name: "金庫|sub|《忘れ物・チェーン確認》|end|" },
-                { name: "置時計|sub|《アラームOFF》|end|" },
-                { name: "鏡|sub|《汚れや手垢除去》|end|" },
-                { name: "ゴミ箱|sub|《ゴミ袋を新しいものに交換》|end|" },
-                { name: "ティッシュ|sub|《三角折り・残量》|end|" },
-                { name: "窓ガラス|sub|《蜘蛛の巣・汚れ除去》|end|" },
-                { name: "下駄箱上|sub|《不用物・忘れ物の有無》|end|" },
-                { name: "冷蔵庫|sub|《汚れ・水残り・忘れ物チェック》|end|" },
-                { name: "電気ケトル|sub|《水残りチェック》|end|" },
-                { name: "コーヒーメーカー|sub|《汚れ・水残り・カートリッジチェック》|end|" }
+                { name: "トイレ|sub|(帯・三角折り・ゴミの有無)|end|" },
+                { name: "トイレットペーパー|sub|(2~3cmは交換)|end|" },
+                { name: "羽織|sub|(汚れ・ポケットや袖に忘れ物の有無)|end|" },
+                { name: "金庫|sub|(忘れ物・チェーン確認)|end|" },
+                { name: "置時計|sub|(アラームOFF)|end|" },
+                { name: "鏡|sub|(汚れや手垢除去)|end|" },
+                { name: "ゴミ箱|sub|(ゴミ袋を新しいものに交換)|end|" },
+                { name: "ティッシュ|sub|(三角折り・残量)|end|" },
+                { name: "窓ガラス|sub|(蜘蛛の巣・汚れ除去)|end|" },
+                { name: "下駄箱上|sub|(不用物・忘れ物の有無)|end|" },
+                { name: "冷蔵庫|sub|(汚れ・水残り・忘れ物チェック)|end|" },
+                { name: "電気ケトル|sub|(水残りチェック)|end|" },
+                { name: "コーヒーメーカー|sub|(汚れ・水残り・カートリッジチェック)|end|" }
             ];
 
             if (['5F_2', '6F_1', '7F_1', '7F_2', 'KANGETSUTEI'].includes(rule)) {
-                checks.push({ name: "ボールペン|sub|《所定位置にあり、書けるか確認》|end|" });
-                checks.push({ name: "アンケート用紙|sub|《シワのない新品を配置》|end|" });
-                checks.push({ name: "化粧鏡|sub|《両面の汚れと手垢除去》|end|" });
+                checks.push({ name: "ボールペン|sub|(所定位置にあり、書けるか確認)|end|" });
+                checks.push({ name: "アンケート用紙|sub|(シワのない新品を配置)|end|" });
+                checks.push({ name: "化粧鏡|sub|(両面の汚れと手垢除去)|end|" });
             }
             if ( (rule === '4F' && !['401', '406', '407'].includes(number)) || rule === '6F_2' || rule === '7F_2' || rule === 'KANGETSUTEI' ) {
-                checks.push({ name: "テーブルランプ|sub|《ホコリ拭き》|end|" });
+                checks.push({ name: "テーブルランプ|sub|(ホコリ拭き)|end|" });
             }
             if ( (rule === '4F' && number !== '405') || rule === '6F_2' ) {
-                checks.push({ name: "ミニサーバーのガラス扉|sub|《汚れや手垢除去》|end|" });
+                checks.push({ name: "ミニサーバーのガラス扉|sub|(汚れや手垢除去)|end|" });
             }
             return checks;
         }
@@ -785,7 +783,7 @@
 
             let result = { preCheck: [], washroom: [], toilet: [], fourSet: [], towels: [], server: [], others: [], finalCheck: getSupplementChecklist(rule, number) };
 
-            const bedCheckFormat = "ベッドメイキング始終確認|sub|《汚れ・破れ・髪の毛》|end|";
+            const bedCheckFormat = "ベッドメイキング始終確認|sub|(汚れ・破れ・髪の毛)|end|";
 
             if (rule === '4F') {
                 const copQty = adultBase + a + b;
@@ -794,7 +792,7 @@
                 const coffeeQty = adultBase; 
                 const haoriQty = adultBase + a;
 
-                if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認|sub|《水残り・髪の毛》|end|", qty: 1, isWarning: true });
+                if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
                 if (hasBeds) result.preCheck.push({ name: bedCheckFormat, qty: 1, isWarning: true });
 
                 result.washroom = [ { name: "コップ", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" } ];
@@ -865,7 +863,7 @@
 
             else if (['5F_2', '6F_1', '7F_1'].includes(rule)) {
                 const adultSuiteBase = (adult > 0) ? 2 : 0; 
-                result.preCheck.push({ name: "浴室の使用有無確認|sub|《水残り・髪の毛》|end|", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "浴室の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
                 result.preCheck.push({ name: bedCheckFormat, qty: 1, isWarning: true });
 
                 result.washroom = [ { name: "コップ|sub|《透明 or スモーク》|end|", qty: adultSuiteBase }, { name: "歯ブラシ", qty: adult, note: "大人" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
@@ -894,7 +892,7 @@
                 const coffeeQty = adultBase;
                 const haoriQty = adultBase + a;
 
-                if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認|sub|《水残り・髪の毛》|end|", qty: 1, isWarning: true });
+                if (isBathInRoom) result.preCheck.push({ name: "浴室の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
                 result.preCheck.push({ name: bedCheckFormat, qty: 1, isWarning: true });
 
                 result.washroom = [ { name: "コップ", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" } ];
@@ -912,7 +910,7 @@
                 if (!isNoStay) result.others.push({ name: "茶菓子", qty: 1 });
                 result.others.push({ name: "羽織", qty: haoriQty, note: isAdultAlone ? "大人1名のみ : 2着" : "大人・Aの人数分" });
                 
-                if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "6Fスタンダード: 人数分" });
+                if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "6F...: 人数分" });
             }
 
             else if (rule === '7F_2') {
@@ -924,7 +922,7 @@
                 const zabutonQty = adultBase + a + b;
                 const haoriQty = adultBase + a;
 
-                result.preCheck.push({ name: "浴室の使用有無確認|sub|《水残り・髪の毛》|end|", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "浴室の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
                 result.preCheck.push({ name: bedCheckFormat, qty: 1, isWarning: true });
 
                 result.washroom = [ { name: "コップ|sub|《透明 or スモーク》|end|", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
@@ -953,7 +951,7 @@
                 );
 
                 if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "3人以上、敷きシーツ準備" }); 
-                if (is705) result.others.push({ name: "重要：マッサージチェアの主電源ON|sub|《壁の照明スイッチ付近》|end|", qty: 1, isWarning: true, isRed: true });
+                if (is705) result.others.push({ name: "重要：マッサージチェア of 主電源ON|sub|(壁的照明スイッチ付近)|end|", qty: 1, isWarning: true, isRed: true });
             }
 
             else if (rule === 'KANGETSUTEI') {
@@ -963,8 +961,8 @@
                 const coffeeQty = adultBase;
                 const haoriQty = adultBase + a;
 
-                result.preCheck.push({ name: "シャワー室の使用有無確認|sub|《水残り・髪の毛》|end|", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "露天風呂の使用有無確認|sub|《水残り・髪の毛・水抜き》|end|", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "シャワー室の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "露天風呂の使用有無確認|sub|(水残り・髪の毛・水抜き)|end|", qty: 1, isWarning: true });
                 result.preCheck.push({ name: bedCheckFormat, qty: 1, isWarning: true });
 
                 result.washroom = [ { name: "コップ|sub|《透明 or スモーク》|end|", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "ロクシタン 4種類", qty: adult > 0 ? 1 : 0, note: "シャンプー ➡︎ コンディショナー ➡︎ シャワージェル ➡︎ ボディローション" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
@@ -975,8 +973,8 @@
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
                 result.server = [
-                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとBの人数分" },
-                    { name: "ティーカップ", qty: adultBase + a + b, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" },
+                    { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとB of 人数分" },
+                    { name: "ティーカップ", qty: adultBase + a + b, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとB of 人数分" },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" },
                     { name: "日本酒|sub|《冷蔵》|end|", qty: adult > 0 ? 1 : 0 },
                     { name: "ドリンク 4種類|sub|《冷蔵》|end|", qty: adult > 0 ? 1 : 0, note: "緑茶 ➡︎ ジャスミン茶 ➡︎ りんごジュース ➡︎ 炭酸水" },
@@ -1141,19 +1139,25 @@
                                 ? 'bg-gradient-to-r from-gold-300 to-gold-200 text-slate-950 border border-gold-400 shadow-md' 
                                 : (isCompleted ? 'bg-[#022c22] text-emerald-300 border border-emerald-800 shadow-sm' : 'bg-[#0f172a] text-slate-300 border border-slate-700 shadow-sm');
 
+                            // 【超重要：非圧縮・非スクロールスワイプHTML構造】
+                            // 部屋番号が絶対に左側から消えないよう、全体をスライドするのを止め、右側の「削除」幅のみを拡張させる設計へ一新
                             roomsListHTML += `
-                                <div class="relative overflow-hidden w-full h-[44px] rounded-lg swipe-item select-none mb-1 border border-transparent">
-                                    <div class="absolute right-0 top-0 h-full w-[70px] bg-red-600 flex items-center justify-center z-0 rounded-r-lg">
-                                        <button onclick="deleteRoom('${room.id}', event)" class="w-full h-full text-white font-bold text-xs serif-title">削除</button>
+                                <div class="relative overflow-hidden w-full h-[44px] rounded-lg swipe-item select-none mb-1 bg-slate-950 flex">
+                                    <!-- メイン客室情報 (Flex-1 + min-w-0 で横幅縮小に追従) -->
+                                    <div onclick="selectActiveRoom('${room.id}')" class="flex-1 h-full ${bgClass} flex items-center justify-between px-3.5 z-10 cursor-pointer rounded-l-lg transition-all duration-200 swipe-content min-w-0">
+                                        <div class="flex items-center gap-2 min-w-0 flex-1">
+                                            <!-- 部屋番号：絶対に動かずはみ出さない（shrink-0） -->
+                                            <span class="text-sm font-black font-serif tracking-wider whitespace-nowrap shrink-0">${escapeHTML(room.number)}号室</span>
+                                            <!-- 備考：幅が狭くなったら自動で省略（text-ellipsis） -->
+                                            <span class="text-[11px] font-black opacity-85 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px] serif-title flex-1">${escapeHTML(room.remarks)}</span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5 shrink-0 ml-1">
+                                            <svg class="w-3.5 h-3.5 opacity-60" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                                        </div>
                                     </div>
-                                    <div onclick="selectActiveRoom('${room.id}')" class="absolute inset-0 ${bgClass} flex items-center justify-between px-3.5 z-10 swipe-content cursor-pointer rounded-lg">
-                                        <div class="flex items-center gap-2.5">
-                                            <span class="text-sm font-black font-serif tracking-wider whitespace-nowrap">${escapeHTML(room.number)}号室</span>
-                                            <span class="text-[11px] font-black opacity-85 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px] serif-title">${escapeHTML(room.remarks)}</span>
-                                        </div>
-                                        <div class="flex items-center gap-1.5">
-                                            <svg class="w-3.5 h-3.5 opacity-60 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
-                                        </div>
+                                    <!-- 削除ボタン：初期は width 0px、スワイプでアコーディオンのようにスムーズ拡張 -->
+                                    <div class="h-full bg-red-600 flex items-center justify-center shrink-0 rounded-r-lg swipe-delete-btn transition-all duration-200 overflow-hidden" style="width: 0px;">
+                                        <button onclick="deleteRoom('${room.id}', event)" class="w-[70px] h-full text-white font-bold text-xs serif-title">削除</button>
                                     </div>
                                 </div>`;
                         });
@@ -1193,6 +1197,7 @@
             if (mobContainer) mobContainer.innerHTML = htmlContent;
             if (pcContainer) pcContainer.innerHTML = htmlContent;
 
+            // 各種スワイプ・ドラッグのイベントリスナー紐付け
             document.querySelectorAll('.swipe-item').forEach(item => {
                 item.addEventListener('touchstart', handleTouchStart, { passive: true });
                 item.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -1412,7 +1417,7 @@
 
             const formatDisplayName = (name, subColorClass = 'text-red-500') => {
                 let html = escapeHTML(name);
-                html = html.replace(/\|sub\|(.*?)\|end\|/g, `<br><span class="text-[12px] ${subColorClass} font-extrabold mt-0.5 block">$1</span>`);
+                html = html.replace(/\|sub\|(.*?)\|end\|/g, `<br><span class="${subColorClass} font-extrabold mt-0.5 block">$1</span>`);
                 return html;
             };
 
@@ -1421,7 +1426,7 @@
                 let html = `<div><span class="text-xs sm:text-sm text-emerald-950 font-black bg-gold-200/90 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">客室の事前点検</span><div class="grid grid-cols-1 md:grid-cols-2 gap-2 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">`;
                 preCheckList.forEach((item, idx) => {
                     const key = `客室の事前点検_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
-                    const textClass = room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (item.isWarning ? 'text-amber-800 font-black' : 'text-slate-900 font-black'));
+                    const textClass = room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (item.isWarning ? 'text-slate-950 font-black' : 'text-slate-900 font-black'));
                     let displayName = formatDisplayName(item.name);
                     let displayNote = formatDisplayName(item.note || '');
                     html += `<label class="flex items-start gap-3 py-2.5 px-2.5 cursor-pointer hover:bg-slate-50 rounded-lg transition-colors border border-slate-100 bg-white shadow-sm font-bold">
@@ -1444,7 +1449,7 @@
                 let html = `<div><span class="text-xs sm:text-sm text-emerald-950 font-black bg-gold-200/90 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">${escapeHTML(categoryName)}</span><div class="grid grid-cols-1 md:grid-cols-2 gap-2 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">`;
                 activeList.forEach((item, idx) => {
                     const key = `${categoryName}_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
-                    const textClass = room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (item.isWarning ? 'text-amber-800 font-black' : 'text-slate-900 font-bold'));
+                    const textClass = room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (item.isWarning ? 'text-slate-950 font-black' : 'text-slate-900 font-bold'));
                     let displayName = formatDisplayName(item.name, subColor);
                     let displayNote = formatDisplayName(item.note || '', subColor);
                     const dynamicUnit = getUnit(item.name);
@@ -1470,9 +1475,7 @@
                 let html = `<div><span class="text-xs sm:text-sm text-gold-900 font-black bg-gold-200 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">客室の最終仕上げ点検</span><div class="grid grid-cols-1 md:grid-cols-2 gap-2 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm font-bold">`;
                 calculated.finalCheck.forEach((item, idx) => {
                     const key = `最終仕上げ_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
-                    
                     let displayName = formatDisplayName(item.name);
-                    
                     html += `<label class="flex items-start gap-3 py-2.5 px-2.5 cursor-pointer hover:bg-slate-50 rounded-lg transition-colors border border-slate-100 bg-white shadow-sm font-bold">
                             <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '最終仕上げ', ${idx})" class="w-5.5 h-5.5 mt-0.5 rounded border-2 border-gold-300 text-gold-800 focus:ring-gold-700 accent-gold-600 shrink-0">
                             <div class="text-[13.5px] sm:text-sm md:text-base ${room.checkedItems[key] ? 'line-through text-slate-400 font-normal font-bold' : 'text-slate-900 font-black'} flex-1 keep-word leading-normal serif-regular w-full">${displayName}</div>
@@ -1529,8 +1532,8 @@
                     <div class="space-y-4 font-bold">${activeCategoriesHTML.join('')}</div>
 
                     <div class="space-y-3.5 pt-3.5 border-t border-slate-200/80 font-bold">
-                        <div id="warning-alert-${room.id}" class="p-3.5 bg-[#fce8e8] border border-[#fce8e8] text-[#7a1b1b] rounded-lg text-xs sm:text-sm font-bold leading-normal flex items-center gap-2 shadow-sm serif-title">
-                            <span>⚠ 未点検の項目があります。すべてにチェックを入れると「完了」に設定できます。</span>
+                        <div id="warning-alert-${room.id}" class="p-3.5 bg-[#fce8e8] border border-[#fce8e8] text-[#7a1b1b] rounded-lg text-xs sm:text-sm font-bold leading-normal flex items-center justify-center text-center shadow-sm serif-title">
+                            <span>未点検の項目があります。すべてにチェックを入れると完了に設定できます。</span>
                         </div>
                         <div class="flex flex-col gap-2.5">
                             <button onclick="clearRoomChecks('${room.id}')" class="w-full text-xs sm:text-sm text-[#cc3333] bg-white hover:bg-red-50 font-bold border-2 border-[#cc3333] py-3 rounded-lg transition-all shadow-sm flex items-center justify-center gap-1.5 serif-title">
@@ -1667,10 +1670,85 @@
             document.getElementById('total-pillow').textContent = '0'; document.getElementById('total-pillow-large').textContent = '0';
         }
 
-        function handleTouchStart(e) { const item = e.currentTarget; touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; document.querySelectorAll('.swipe-content').forEach(el => { if (el !== item.querySelector('.swipe-content')) el.style.transform = 'translateX(0px)'; }); currentSwipeElem = item.querySelector('.swipe-content'); }
-        function handleTouchMove(e) { if (!currentSwipeElem) return; const diffX = e.touches[0].clientX - touchStartX; const diffY = e.touches[0].clientY - touchStartY; if (Math.abs(diffX) > Math.abs(diffY)) { e.preventDefault(); currentSwipeElem.style.transform = `translateX(${Math.max(-80, Math.min(0, diffX))}px)`; } }
-        function handleTouchEnd(e) { if (!currentSwipeElem) return; const diffX = e.changedTouches[0].clientX - touchStartX; currentSwipeElem.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)'; currentSwipeElem.style.transform = diffX < -45 ? 'translateX(-70px)' : 'translateX(0px)'; currentSwipeElem = null; }
-        function handleMouseDown(e) { const swipeContent = e.currentTarget.querySelector('.swipe-content'); if(swipeContent) { let mStartX = e.clientX; const onMouseMove = (mEvent) => { let diffX = mEvent.clientX - mStartX; if(diffX < 0) swipeContent.style.transform = `translateX(${Math.max(-70, diffX)}px)`; }; const onMouseUp = (uEvent) => { let diffX = uEvent.clientX - mStartX; swipeContent.style.transition = 'transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)'; swipeContent.style.transform = diffX < -30 ? 'translateX(-70px)' : 'translateX(0px)'; document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); }; document.addEventListener('mousemove', onMouseMove); document.addEventListener('mouseup', onMouseUp); } }
+        // スワイプ時にボタン幅をダイレクトに操作する高性能なイベント処理群
+        function handleTouchStart(e) {
+            const item = e.currentTarget;
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            
+            // 既に開いている他室のスワイプをすべて閉じる
+            document.querySelectorAll('.swipe-delete-btn').forEach(el => {
+                if (el !== item.querySelector('.swipe-delete-btn')) {
+                    el.style.width = '0px';
+                }
+            });
+            
+            currentSwipeDeleteBtn = item.querySelector('.swipe-delete-btn');
+            if (currentSwipeDeleteBtn) {
+                currentSwipeDeleteBtn.style.transition = 'none'; // ドラッグ追従中はTransitionを無効化
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (!currentSwipeDeleteBtn) return;
+            const diffX = touchStartX - e.touches[0].clientX; // 左スワイプが正の値
+            const diffY = touchStartY - e.touches[0].clientY;
+            
+            // 縦スクロールと横スワイプがぶつからないよう横移動が強い時のみ処理
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                e.preventDefault();
+                const targetWidth = Math.max(0, Math.min(70, diffX));
+                currentSwipeDeleteBtn.style.width = `${targetWidth}px`;
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (!currentSwipeDeleteBtn) return;
+            // 挙動確定時にはなめらかなTransitionを再付与
+            currentSwipeDeleteBtn.style.transition = 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+            const currentWidth = parseInt(currentSwipeDeleteBtn.style.width) || 0;
+            // 閾値35pxを超えていれば完全展開（70px）、満たなければ閉じる
+            if (currentWidth > 35) {
+                currentSwipeDeleteBtn.style.width = '70px';
+            } else {
+                currentSwipeDeleteBtn.style.width = '0px';
+            }
+            currentSwipeDeleteBtn = null;
+        }
+
+        function handleMouseDown(e) {
+            const item = e.currentTarget;
+            const deleteBtn = item.querySelector('.swipe-delete-btn');
+            if (!deleteBtn) return;
+
+            document.querySelectorAll('.swipe-delete-btn').forEach(el => {
+                if (el !== deleteBtn) el.style.width = '0px';
+            });
+
+            let mStartX = e.clientX;
+            deleteBtn.style.transition = 'none';
+
+            const onMouseMove = (mEvent) => {
+                let diffX = mStartX - mEvent.clientX;
+                const targetWidth = Math.max(0, Math.min(70, diffX));
+                deleteBtn.style.width = `${targetWidth}px`;
+            };
+
+            const onMouseUp = (uEvent) => {
+                deleteBtn.style.transition = 'width 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
+                let diffX = mStartX - uEvent.clientX;
+                if (diffX > 35) {
+                    deleteBtn.style.width = '70px';
+                } else {
+                    deleteBtn.style.width = '0px';
+                }
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
+
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        }
 
         function deleteRoom(id, event) {
             if (event) event.stopPropagation();
@@ -1766,7 +1844,7 @@
             if (inputVal === '') return;
 
             let roomsToAdd = [];
-            if (['ALL', 'ぜんしつ', '全室'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE); } 
+            if (['ALL', 'ぜんしつ', 'ALL'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE); } 
             else if (['HONKAN', 'ホンカン', '本館'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "本館"); }
             else if (['KANGETSU', 'カンゲツテイ', 'かんげつてい', '観月亭'].includes(inputVal)) { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" || ROOM_DATABASE[key].building === "東館"); }
             else if (inputVal === '1F' || inputVal === '1階') { roomsToAdd = Object.keys(ROOM_DATABASE).filter(key => ROOM_DATABASE[key].building === "はなれ西館" && ROOM_DATABASE[key].floor === "1階"); } 
