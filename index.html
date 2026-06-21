@@ -288,9 +288,9 @@
                         <div class="p-2.5 bg-[#FAF8F2] border border-gold-200 rounded-xl">
                             <p class="text-[10px] text-slate-500 font-bold leading-relaxed serif-title">
                                 <b>一括登録コマンド例：</b><br>
-                                ・<span class="text-emerald-900 font-black">本館</span>：本館の全客室を一括登録 / <span class="text-emerald-900 font-black">観月亭</span>：観月亭（西・東館）の全客室を一括登録<br>
                                 ・<span class="text-emerald-900 font-black">4F</span>：4階の全客室を一括登録<br>
-                                ・<span class="text-emerald-900 font-black">西2F</span>：観月亭西館の2階を一括登録<br>
+                                ・<span class="text-emerald-900 font-black">本館</span>：本館の全客室を一括登録<br>
+                                ・<span class="text-emerald-900 font-black">西2F</span>：観月亭西館 de 2階を一括登録<br>
                                 ・<span class="text-emerald-900 font-black">401~405</span>：401から405までの実在客室を範囲登録<br>
                                 ・<span class="text-emerald-900 font-black">4F~6F</span>：4階〜6階の全客室を登録 / <span class="text-emerald-950 font-black">全室</span>：全客室
                             </p>
@@ -333,54 +333,63 @@
             </section>
         </div>
 
-        <!-- 本日の用意するリネン【合計】 フローティングパネル -->
-        <div id="sticky-linen-footer" class="fixed bottom-4 left-4 right-4 lg:left-[calc(25%+2rem)] lg:right-4 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-2 border-gold-300 shadow-2xl z-40 rounded-2xl hidden transition-all duration-300 font-bold">
-            <button onclick="toggleLinenTotalPanel()" class="w-full flex items-center justify-between px-4 py-3.5 focus:outline-none rounded-2xl">
-                <h3 class="font-serif font-black text-xs sm:text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
-                    <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                    </svg>
-                    本日用意するリネン【合計】
-                </h3>
-                <div class="flex items-center gap-2">
-                    <svg id="linen-toggle-arrow" class="w-5 h-5 text-gold-300 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </div>
-            </button>
+        <!-- 本日の用意するリネン【合計】 フローティングパネル (メインコンテンツの横幅と完璧に同期するグリッド設計) -->
+        <div class="fixed bottom-4 left-0 right-0 z-40 pointer-events-none">
+            <div class="w-full max-w-[98%] xl:max-w-[1400px] mx-auto px-3 md:px-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- 左サイドスペース分のスペーサー（PC/タブレット用） -->
+                <div class="hidden lg:block lg:col-span-3"></div>
+                <!-- 右側メインワークスペースの横幅と完璧に揃えたコンテナ -->
+                <div class="col-span-1 lg:col-span-9 pointer-events-auto">
+                    <div id="sticky-linen-footer" class="bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-950 text-white border-2 border-gold-300 shadow-2xl rounded-2xl hidden transition-all duration-300 font-bold">
+                        <button onclick="toggleLinenTotalPanel()" class="w-full flex items-center justify-between px-4 py-3.5 focus:outline-none rounded-2xl">
+                            <h3 class="font-serif font-black text-xs sm:text-sm text-gold-300 tracking-wider flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-gold-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                </svg>
+                                本日用意するリネン【合計】
+                            </h3>
+                            <div class="flex items-center gap-2">
+                                <svg id="linen-toggle-arrow" class="w-5 h-5 text-gold-300 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </button>
 
-            <div id="linen-total-content" class="hidden p-3 grid grid-cols-2 gap-2 border-t border-gold-300/20 overflow-y-auto max-w-full" style="max-height: 60vh;">
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-slate-400 font-black serif-title tracking-wider">掛けシーツ (S)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-white" id="total-kake-s">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-gold-300 font-black serif-title tracking-wider">敷きシーツ (S)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-gold-300" id="total-shiki-s">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-slate-400 font-black serif-title tracking-wider">掛けシーツ (SD)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-white" id="total-kake-sd">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-gold-300 font-black serif-title tracking-wider">敷きシーツ (SD)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-gold-300" id="total-shiki-sd">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-slate-400 font-black serif-title tracking-wider">掛けシーツ (W)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-white" id="total-kake-w">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-gold-300 font-black serif-title tracking-wider">敷きシーツ (W)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-gold-300" id="total-shiki-w">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-fuchsia-300 font-black serif-title tracking-wider">枕カバー (通常)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-fuchsia-300" id="total-pillow">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
-                </div>
-                <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
-                    <span class="text-xs sm:text-sm md:text-base text-fuchsia-300 font-black serif-title tracking-wider">枕カバー (大)</span>
-                    <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-fuchsia-300" id="total-pillow-large">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                        <div id="linen-total-content" class="hidden p-3 grid grid-cols-2 gap-2 border-t border-gold-300/20 overflow-y-auto max-w-full" style="max-height: 60vh;">
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-slate-400 font-black serif-title tracking-wider">掛けシーツ (S)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-white" id="total-kake-s">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-gold-300 font-black serif-title tracking-wider">敷きシーツ (S)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-gold-300" id="total-shiki-s">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-slate-400 font-black serif-title tracking-wider">掛けシーツ (SD)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-white" id="total-kake-sd">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-gold-300 font-black serif-title tracking-wider">敷きシーツ (SD)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-gold-300" id="total-shiki-sd">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-slate-400 font-black serif-title tracking-wider">掛けシーツ (W)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-white" id="total-kake-w">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-gold-300 font-black serif-title tracking-wider">敷きシーツ (W)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-gold-300" id="total-shiki-w">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-fuchsia-300 font-black serif-title tracking-wider">枕カバー (通常)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-fuchsia-300" id="total-pillow">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                            <div class="bg-slate-900/85 p-2.5 sm:p-4 rounded-xl border border-slate-800 flex flex-col justify-between h-full shadow-inner">
+                                <span class="text-xs sm:text-sm md:text-base text-fuchsia-300 font-black serif-title tracking-wider">枕カバー (大)</span>
+                                <div class="text-right mt-1 sm:mt-2"><span class="text-xl sm:text-2xl md:text-3xl font-black text-fuchsia-300" id="total-pillow-large">0</span><span class="text-xs sm:text-sm text-slate-500 font-bold ml-1">枚</span></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -621,7 +630,7 @@
             if (name.includes("羽織")) return "着";
             if (name.includes("コーヒー系") || name.includes("湯呑み＆茶パック")) return "セット";
             if (name.includes("種類")) return "セット";
-            if (name.includes("足袋")) return "個";
+            if (name.includes("足袋")) return "足";
             if (name.includes("シーツ") || name.includes("カバー") || name.includes("タオル") || name.includes("マット") || name.includes("用紙") || name.includes("ペーパー") || name.includes("バッグ") || name.includes("帯")) return "枚";
             if (name.includes("スリッパ")) return "足";
             if (name.includes("座椅子") || name.includes("座布団") || name.includes("セット")) return "組";
@@ -686,14 +695,14 @@
 
             if (floor === "6階") {
                 if (isSemiSuite) {
-                    if (numStr === "601" || numStr === "602" || numStr === "603") { const N_limit = Math.min(N, 2); result.kakeSD = N_limit; result.shikiSD = N_limit; result.pillow = N_limit * 2; }
+                    if (numStr === "601" || numStr === "602" || numStr === "603") { const N_limit = Math.min(N, 2); result.kakeSD = N_limit; result.shikiSD = N_limit; result.pillowL = N_limit * 2; }
                     else if (numStr === "605") { result.kakeW = 1; result.shikiW = 1; result.pillow = 4; }
                 } else if (rule === "6F_2") { result.kakeS = N; result.shikiS = N; result.pillow = N; }
                 return result;
             }
 
             if (floor === "7階") {
-                if (isSemiSuite) { const N_limit = Math.min(N, 2); result.kakeSD = N_limit; result.shikiSD = N_limit; result.pillow = N_limit * 2; } 
+                if (isSemiSuite) { const N_limit = Math.min(N, 2); result.kakeSD = N_limit; result.shikiSD = N_limit; result.pillowL = N_limit * 2; } 
                 else { result.shikiSD = N; result.shikiS = N; result.pillow = N; }
                 return result;
             }
@@ -721,29 +730,29 @@
             const checks = [
                 { name: "トイレ|sub|(帯・三角折り・ゴミの有無)|end|" },
                 { name: "トイレットペーパー|sub|(2~3cmは交換)|end|" },
-                { name: "羽織|sub|(汚れ・ポケットや袖に忘れ物の有無)|end|" },
-                { name: "金庫|sub|(忘れ物・チェーン確認)|end|" },
+                { name: "羽織|sub|(汚れ・ポケットや袖の忘れ物)|end|" },
+                { name: "金庫|sub|(忘れ物・チェーン)|end|" },
                 { name: "置時計|sub|(アラームOFF)|end|" },
-                { name: "鏡|sub|(汚れや手垢除去)|end|" },
-                { name: "ゴミ箱|sub|(ゴミ袋を新しいものに交換)|end|" },
+                { name: "鏡|sub|(汚れ)|end|" },
+                { name: "ゴミ箱|sub|(ゴミ袋交換)|end|" },
                 { name: "ティッシュ|sub|(三角折り・残量)|end|" },
-                { name: "窓ガラス|sub|(蜘蛛の巣・汚れ除去)|end|" },
-                { name: "下駄箱上|sub|(不用物・忘れ物の有無)|end|" },
-                { name: "冷蔵庫|sub|(汚れ・水残り・忘れ物チェック)|end|" },
-                { name: "電気ケトル|sub|(水残りチェック)|end|" },
-                { name: "コーヒーメーカー|sub|(汚れ・水残り・カートリッジチェック)|end|" }
+                { name: "窓ガラス|sub|(蜘蛛の巣・汚れ)|end|" },
+                { name: "下駄箱上|sub|(不用物・忘れ物)|end|" },
+                { name: "冷蔵庫|sub|(汚れ・水残り・忘れ物)|end|" },
+                { name: "電気ケトル|sub|(水残り)|end|" },
+                { name: "コーヒーメーカー|sub|(汚れ・水残り・カートリッジ有無)|end|" }
             ];
 
             if (['5F_2', '6F_1', '7F_1', '7F_2', 'KANGETSUTEI'].includes(rule)) {
-                checks.push({ name: "ボールペン|sub|(所定位置にあり、書けるか確認)|end|" });
-                checks.push({ name: "アンケート用紙|sub|(シワのない新品を配置)|end|" });
-                checks.push({ name: "化粧鏡|sub|(両面の汚れと手垢除去)|end|" });
+                checks.push({ name: "ボールペン|sub|(試し書き必須)|end|" });
+                checks.push({ name: "アンケート用紙|sub|(新品)|end|" });
+                checks.push({ name: "化粧鏡|sub|(両面の汚れ)|end|" });
             }
             if ( (rule === '4F' && !['401', '406', '407'].includes(number)) || rule === '6F_2' || rule === '7F_2' || rule === 'KANGETSUTEI' ) {
-                checks.push({ name: "テーブルランプ|sub|(ホコリ拭き)|end|" });
+                checks.push({ name: "テーブルランプ|sub|(ホコリ)|end|" });
             }
             if ( (rule === '4F' && number !== '405') || rule === '6F_2' ) {
-                checks.push({ name: "ミニサーバーのガラス扉|sub|(汚れや手垢除去)|end|" });
+                checks.push({ name: "ミニサーバーのガラス扉|sub|(汚れ)|end|" });
             }
             return checks;
         }
@@ -807,7 +816,7 @@
                 let slipperNote = isAdultAlone ? "大人1名のみ : 2足" : `大人用:${adult_A}足 / 子供用:${b+c+d}足`;
                 let zabutonQty = number === '406' ? (adultBase + a + b) : 0;
 
-                result.others = [ { name: "スリッパ|sub|《大人用くぼみタイプ》|end|", qty: slipQty, note: slipperNote }, { name: "ミネラルウォーター", qty: adult_A_B, note: "大人・AとB" } ];
+                result.others = [ { name: "スリッパ|sub|《大人用フラットタイプ》|end|", qty: slipQty, note: slipperNote }, { name: "ミネラルウォーター", qty: adult_A_B, note: "大人・AとB" } ];
                 if (!isNoStay) result.others.push({ name: "茶菓子", qty: 1 });
 
                 if (number === '406') result.others.push({ name: "座椅子＆座布団", qty: zabutonQty, note: isAdultAlone ? "大人1名のみ : 2組" : "大人・AとBの人数分|sub|《406のみ》|end|" });
@@ -853,7 +862,7 @@
                 
                 const calculatedShikiQty = is522 ? adult_A_B_C : (adult_A_B_C * 2);
                 result.others.push(
-                    { name: "座椅子＆座布団", qty: zabutonQty, note: isAdultAlone ? "大人1名のみ : 2組" : "大人・AとBの人数分" },
+                    { name: "座椅子＆座布団", qty: zabutonQty, note: isAdultAlone ? "大人1名のみ : 2組" : "大人・AとB of 人数分" },
                     { name: "羽織", qty: haoriQty, note: isAdultAlone ? "大人1名のみ : 2着" : "大人・Aの人数分" },
                     { name: "敷布団シーツ＆枕カバー", qty: calculatedShikiQty, note: is522 ? "522の敷シーツは6階用" : "5F通常和室: 人数×2枚" }
                 );
@@ -946,12 +955,12 @@
                 result.others = [ { name: "スリッパ|sub|《大人用フラットタイプ》|end|", qty: slipQty, note: slipperNote }, { name: "ミネラルウォーター", qty: adult_A_B, note: "大人・AとB" } ];
                 if (!isNoStay) result.others.push({ name: "茶菓子", qty: 1 });
                 result.others.push(
-                    { name: "座椅子＆座布団", qty: zabutonQty, note: isAdultAlone ? "大人1名のみ : 2組" : "大人・AとBの人数分" },
+                    { name: "座椅子＆座布団", qty: zabutonQty, note: isAdultAlone ? "大人1名のみ : 2組" : "大人・AとB of 人数分" },
                     { name: "羽織", qty: haoriQty, note: isAdultAlone ? "大人1名のみ : 2着" : "大人・Aの人数分" }
                 );
 
                 if (adult_A_B_C > 0) result.others.push({ name: "敷布団シーツ＆枕カバー", qty: adult_A_B_C, note: "3人以上、敷きシーツ準備" }); 
-                if (is705) result.others.push({ name: "重要：マッサージチェア of 主電源ON|sub|(壁的照明スイッチ付近)|end|", qty: 1, isWarning: true, isRed: true });
+                if (is705) result.others.push({ name: "重要：マッサージチェアの主電源ON|sub|(壁の照明スイッチ付近)|end|", qty: 1, isWarning: true });
             }
 
             else if (rule === 'KANGETSUTEI') {
@@ -962,13 +971,13 @@
                 const haoriQty = adultBase + a;
 
                 result.preCheck.push({ name: "シャワー室の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
-                result.preCheck.push({ name: "露天風呂の使用有無確認|sub|(水残り・髪の毛・水抜き)|end|", qty: 1, isWarning: true });
+                result.preCheck.push({ name: "露天風呂の使用有無確認|sub|(水残り・髪の毛)|end|", qty: 1, isWarning: true });
                 result.preCheck.push({ name: bedCheckFormat, qty: 1, isWarning: true });
 
                 result.washroom = [ { name: "コップ|sub|《透明 or スモーク》|end|", qty: copQty, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとBの人数分" }, { name: "歯ブラシ", qty: adult_A_B, note: "大人・AとB" }, { name: "ロクシタン 4種類", qty: adult > 0 ? 1 : 0, note: "シャンプー ➡︎ コンディショナー ➡︎ シャワージェル ➡︎ ボディローション" }, { name: "フェイスタオル", qty: 1, note: "洗面所用" }, { name: "バスマット", qty: 1 } ];
                 result.toilet = [ { name: "フェイスタオル", qty: 1, note: "トイレ用" } ];
                 result.fourSet = [ { name: "くし", qty: adult, note: "大人" }, { name: "ヘアゴム", qty: adult, note: "大人" }, { name: "ヘアターバン", qty: adult, note: "大人" }, { name: "コットン", qty: adult, note: "大人" } ];
-                result.towels = [ { name: "バスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "フェイスタオル", qty: adult_A_B * 2, note: "※大人・AとBの人数×2枚" }, { name: "ボディタオル", qty: adult_A_B, note: "大人・AとB" }, { name: "足袋", qty: adult, note: "大人" }, { name: "ランドリーバッグ", qty: adult_A_B, note: "大人・AとB" } ];
+                result.towels = [ { name: "バスタオル", qty: adult_A_B * 2, note: "大人・AとBの人数×2枚" }, { name: "フェイスタオル", qty: adult_A_B * 2, note: "大人・AとBの人数×2枚" }, { name: "ボディタオル", qty: adult_A_B, note: "大人・AとB" }, { name: "足袋", qty: adult, note: "大人" }, { name: "ランドリーバッグ", qty: adult_A_B, note: "大人・AとB" } ];
 
                 let teaPackCount = adult_A_B > 0 ? ((adult_A_B >= 3) ? adult_A_B : 2) : 0;
 
@@ -976,7 +985,7 @@
                     { name: "湯呑み＆茶パック", qty: teaQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人・AとB of 人数分" },
                     { name: "ティーカップ", qty: adultBase + a + b, note: isAdultAlone ? "大人1名のみ : 2個" : "大人・AとB of 人数分" },
                     { name: "コーヒー系", qty: coffeeQty, note: isAdultAlone ? "大人1名のみ : 2セット" : "大人" },
-                    { name: "日本酒|sub|《冷蔵》|end|", qty: adult > 0 ? 1 : 0 },
+                    { name: "日本酒", qty: adult > 0 ? 1 : 0 },
                     { name: "ドリンク 4種類|sub|《冷蔵》|end|", qty: adult > 0 ? 1 : 0, note: "緑茶 ➡︎ ジャスミン茶 ➡︎ りんごジュース ➡︎ 炭酸水" },
                     { name: "アルコール 3種類|sub|《冷蔵》|end|", qty: adult > 0 ? 1 : 0, note: "ビール ➡︎ 酎ハイ〈檸檬〉➡︎ 酎ハイ〈桃〉" },
                     { name: "ティーパック 4種類", qty: adult > 0 ? 1 : 0, note: "1セット" },
@@ -1247,20 +1256,23 @@
             const addRoomPanel = document.getElementById('add-room-outer-panel');
             const stickyFooter = document.getElementById('sticky-linen-footer');
 
-            [btnPrep, btnBed].forEach(b => b.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all text-gold-100/70 hover:text-white flex items-center justify-center gap-1 serif-title");
-            [contentPrep, contentBed].forEach(c => c.classList.add('hidden'));
+            if (btnPrep) btnPrep.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all text-gold-100/70 hover:text-white flex items-center justify-center gap-1 serif-title";
+            if (btnBed) btnBed.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all text-gold-100/70 hover:text-white flex items-center justify-center gap-1 serif-title";
+            
+            if (contentPrep) contentPrep.classList.add('hidden');
+            if (contentBed) contentBed.classList.add('hidden');
 
             if (tabId === 'prep') {
-                btnPrep.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
-                contentPrep.classList.remove('hidden');
-                addRoomPanel.classList.remove('hidden');
-                stickyFooter.classList.add('hidden'); 
+                if (btnPrep) btnPrep.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
+                if (contentPrep) contentPrep.classList.remove('hidden');
+                if (addRoomPanel) addRoomPanel.classList.remove('hidden');
+                if (stickyFooter) stickyFooter.classList.add('hidden'); 
                 renderRoomsList();
             } else if (tabId === 'bed') {
-                btnBed.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
-                contentBed.classList.remove('hidden');
-                addRoomPanel.classList.add('hidden'); 
-                stickyFooter.classList.remove('hidden'); 
+                if (btnBed) btnBed.className = "py-2 text-[12px] sm:text-sm font-black rounded-xl transition-all flex items-center justify-center gap-1 bg-gradient-to-r from-gold-500 to-gold-400 text-slate-950 shadow serif-title";
+                if (contentBed) contentBed.classList.remove('hidden');
+                if (addRoomPanel) addRoomPanel.classList.add('hidden'); 
+                if (stickyFooter) stickyFooter.classList.remove('hidden'); 
                 renderBedmakingView();
             }
         }
@@ -1366,7 +1378,7 @@
                 } else {
                     cardBody.className = "bg-red-50/40 border-2 border-red-200 p-4 rounded-2xl shadow-sm space-y-4 transition-all duration-300";
                     statusBanner.className = "py-3 px-4 bg-[#cc3333] text-white rounded-lg text-sm font-extrabold text-center shadow-sm serif-title";
-                    statusBanner.innerHTML = `<span class="hidden sm:inline">⚠ まだ未確認の項目があります。点検を続けてください。</span><span class="sm:hidden font-black">⚠ まだ未確認の項目があります。<br>点検を続けてください。</span>`;
+                    statusBanner.innerHTML = `<span class="hidden sm:inline">⚠ まだ未確認の項目があります。点検を続けてください。</span><span class="sm:hidden font-black">⚠ まだ未確認 of 項目があります。<br>点検を続けてください。</span>`;
                     warningAlert.classList.remove('hidden');
                 }
             }
@@ -1415,9 +1427,31 @@
             const calculated = calculateItems(room.rule, room.number, room.guests, room.remarks, room.option);
             const activeCategoriesHTML = [];
 
-            const formatDisplayName = (name, subColorClass = 'text-red-500') => {
+            // 添付画像「スクリーンショット 2026-06-20 21.11.57_2.png」の書体（丸カッコ・太字ゴシック）に、山括弧《》を含めて完全に統一するフォーマッタ
+            // 第三引数 forceRed が true の場合は、文脈に関わらずすべて鮮やかな赤色（text-red-600）で表示します
+            const formatDisplayName = (name, subColorClass = 'text-slate-500', forceRed = false) => {
                 let html = escapeHTML(name);
-                html = html.replace(/\|sub\|(.*?)\|end\|/g, `<br><span class="${subColorClass} font-extrabold mt-0.5 block">$1</span>`);
+                
+                // データに《》が含まれている場合は、スリッパ等と同じ丸カッコ () に変換して統一
+                html = html.replace(/《/g, '(').replace(/》/g, ')');
+                
+                html = html.replace(/\|sub\|(.*?)\|end\|/g, (match, p1) => {
+                    let displayText = p1.trim();
+                    // カッコで囲まれていない補足情報があれば、自動でカッコ ( ) に囲んで書体を合わせる
+                    if (!displayText.startsWith('(') && !displayText.startsWith('（')) {
+                        displayText = `(${displayText})`;
+                    }
+                    
+                    let color = 'text-blue-600'; // 通常の補足事項はすべて清潔感あふれる美しい青色に統一
+                    
+                    if (forceRed) {
+                        color = 'text-red-600';
+                    } else if (subColorClass.includes('text-red') || displayText.includes('重要') || displayText.includes('注意') || displayText.includes('必須') || displayText.includes('忘れ') || displayText.includes('不用') || displayText.includes('汚れ') || displayText.includes('試し書き') || displayText.includes('破れ') || displayText.includes('髪の毛')) {
+                        color = 'text-red-600'; // 警告や重要な項目は、以前同様赤色表示を維持
+                    }
+                    
+                    return `<br><span class="${color} font-bold font-sans text-xs sm:text-sm mt-0.5 block">${displayText}</span>`;
+                });
                 return html;
             };
 
@@ -1427,13 +1461,16 @@
                 preCheckList.forEach((item, idx) => {
                     const key = `客室の事前点検_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
                     const textClass = room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (item.isWarning ? 'text-slate-950 font-black' : 'text-slate-900 font-black'));
-                    let displayName = formatDisplayName(item.name);
-                    let displayNote = formatDisplayName(item.note || '');
+                    
+                    let subColor = item.isRed || item.isWarning ? 'text-red-600' : 'text-slate-500';
+                    let displayName = formatDisplayName(item.name, subColor);
+                    let displayNote = formatDisplayName(item.note || '', subColor);
+                    
                     html += `<label class="flex items-start gap-3 py-2.5 px-2.5 cursor-pointer hover:bg-slate-50 rounded-lg transition-colors border border-slate-100 bg-white shadow-sm font-bold">
                             <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '客室の事前点検', ${idx})" class="w-5.5 h-5.5 mt-0.5 rounded border-2 border-slate-300 text-emerald-800 focus:ring-emerald-700 accent-emerald-800 shrink-0">
                             <div class="text-[13px] sm:text-sm md:text-base ${textClass} flex items-start flex-wrap gap-1 leading-normal serif-regular w-full font-bold">
                                 <span class="flex-1 keep-word font-bold">${displayName}</span>
-                                ${displayNote ? `<span class="text-xs text-slate-500 font-bold font-sans block w-full ml-0 mt-0.5">(${displayNote})</span>` : ''}
+                                ${displayNote ? `<span class="text-xs sm:text-sm ${subColor} font-bold font-sans block w-full ml-0 mt-0.5">(${displayNote})</span>` : ''}
                             </div></label>`;
                 });
                 html += `</div></div>`; activeCategoriesHTML.push(html);
@@ -1443,22 +1480,23 @@
                 const activeList = list.filter(item => item.qty > 0 || item.isWarning);
                 if (activeList.length === 0) return;
                 
-                const isTargetCategory = ["洗面所", "4点セット", "タオル類", "ミニサーバー", "その他"].includes(categoryName);
-                const subColor = isTargetCategory ? 'text-emerald-800' : 'text-red-500';
-
                 let html = `<div><span class="text-xs sm:text-sm text-emerald-950 font-black bg-gold-200/90 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">${escapeHTML(categoryName)}</span><div class="grid grid-cols-1 md:grid-cols-2 gap-2 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm">`;
                 activeList.forEach((item, idx) => {
                     const key = `${categoryName}_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
                     const textClass = room.checkedItems[key] ? 'line-through text-slate-400 font-normal' : (item.isRed ? 'text-red-600 font-extrabold animate-pulse' : (item.isWarning ? 'text-slate-950 font-black' : 'text-slate-900 font-bold'));
+                    
+                    // 注意事項・警告等以外は基本青色に統一
+                    let subColor = item.isRed || item.isWarning ? 'text-red-600' : 'text-slate-500';
                     let displayName = formatDisplayName(item.name, subColor);
                     let displayNote = formatDisplayName(item.note || '', subColor);
                     const dynamicUnit = getUnit(item.name);
+                    
                     html += `<label class="flex items-start gap-3 py-2.5 px-2.5 cursor-pointer hover:bg-slate-50 rounded-lg transition-colors border border-slate-100 bg-white shadow-sm font-bold">
                             <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '${escapeHTML(categoryName)}', ${idx})" class="w-5.5 h-5.5 mt-0.5 rounded border-2 border-slate-300 text-emerald-800 focus:ring-emerald-700 accent-emerald-800 shrink-0">
                             <div class="text-[13px] sm:text-sm md:text-base ${textClass} flex items-start flex-wrap gap-1 leading-normal serif-regular w-full font-bold">
                                 ${!item.isWarning ? `<span class="bg-gold-100 border border-gold-300 px-2 py-0.5 rounded text-xs sm:text-sm font-black shrink-0 leading-none inline-block font-sans">${item.qty}${escapeHTML(dynamicUnit)}</span>` : `<span class="bg-amber-500 text-slate-950 px-2 py-0.5 rounded text-[10px] sm:text-xs font-black shrink-0 leading-none inline-block font-sans">注意確認</span>`}
                                 <span class="flex-1 keep-word font-bold">${displayName}</span>
-                                ${displayNote ? `<span class="text-xs sm:text-sm text-slate-500 font-bold font-sans block w-full ml-0 mt-0.5">(${displayNote})</span>` : ''}
+                                ${displayNote ? `<span class="text-xs sm:text-sm ${subColor} font-bold font-sans block w-full ml-0 mt-0.5">(${displayNote})</span>` : ''}
                             </div></label>`;
                 });
                 html += `</div></div>`; activeCategoriesHTML.push(html);
@@ -1475,7 +1513,8 @@
                 let html = `<div><span class="text-xs sm:text-sm text-gold-900 font-black bg-gold-200 px-3 py-1 rounded border border-gold-300 inline-block mb-1.5 shadow-sm serif-title">客室の最終仕上げ点検</span><div class="grid grid-cols-1 md:grid-cols-2 gap-2 bg-white p-2.5 rounded-xl border border-slate-200/50 shadow-sm font-bold">`;
                 calculated.finalCheck.forEach((item, idx) => {
                     const key = `最終仕上げ_${idx}`; const isChecked = room.checkedItems[key] ? 'checked' : '';
-                    let displayName = formatDisplayName(item.name);
+                    // 最終仕上げ点検の( )カッコ内を強制的に「赤色」にするために、第三引数 forceRed に true を渡す
+                    let displayName = formatDisplayName(item.name, 'text-red-600', true);
                     html += `<label class="flex items-start gap-3 py-2.5 px-2.5 cursor-pointer hover:bg-slate-50 rounded-lg transition-colors border border-slate-100 bg-white shadow-sm font-bold">
                             <input type="checkbox" ${isChecked} onchange="toggleCheckItem('${room.id}', '最終仕上げ', ${idx})" class="w-5.5 h-5.5 mt-0.5 rounded border-2 border-gold-300 text-gold-800 focus:ring-gold-700 accent-gold-600 shrink-0">
                             <div class="text-[13.5px] sm:text-sm md:text-base ${room.checkedItems[key] ? 'line-through text-slate-400 font-normal font-bold' : 'text-slate-900 font-black'} flex-1 keep-word leading-normal serif-regular w-full">${displayName}</div>
